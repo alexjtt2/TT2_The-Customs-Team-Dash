@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Responsive Multi-Tab Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Highcharts Gantt Library and Modules -->
+    <script src="https://code.highcharts.com/gantt/highcharts-gantt.js"></script>
+    <script src="https://code.highcharts.com/gantt/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/gantt/modules/accessibility.js"></script>
+    <!-- Highcharts Modules (Optional, if needed for other charts) -->
+    <script src="https://code.highcharts.com/modules/series-label.js"></script>
+    <style>
+        /* CSS Reset */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        html, body {
+            height: 100%;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+            font-family: Arial, sans-serif;
+            height: 100vh; /* Fill the viewport height */
+            overflow: hidden; /* Prevent body from scrolling */
+        }
+        /* Header and Tab Navigation */
+        header {
+            flex: 0 0 auto;
+            background-color: white;
+            padding: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .tab-navigation {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .tabs {
+            display: flex;
+        }
+        .tablink {
+            padding: 10px 20px;
+            border: none;
+            background-color: white;
+            color: black;
+            cursor: pointer;
+            font-size: 16px;
+            margin-right: 5px;
+            outline: none;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .tablink.active {
+            background-color: #3399ff;
+            color: white;
+        }
+        .tablink:hover {
+            background-color: #e0e0e0;
+        }
+        /* Dark Mode Toggle Switch */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: grey;
+            transition: .4s;
+            border-radius: 24px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: black;
+        }
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+        /* Tab Content */
+        .tabcontent {
+            flex: 1;
+            display: none;
+            flex-direction: column;
+            padding: 10px;
+            gap: 10px;
+            min-height: 0;
+        }
+        .tabcontent.active {
+            display: flex;
+        }
+        /* Rows and Containers */
+        .row {
+            display: flex;
+            flex: 1;
+            gap: 10px;
+            min-height: 0;
+        }
+        .container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            min-height: 0;
+        }
+        .container.full {
+            flex: 1;
+        }
+        /* Grid Container inside the first row */
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            gap: 10px;
+            flex: 1;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            min-height: 0;
+        }
+        .grid-container-item {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+            position: relative;
+        }
+        /* Card Title */
+        .card-title {
+            text-align: center;
+            font-size: 8px;
+            margin-top: 5px;
+        }
+
+        /* Card Number */
+        .card-number {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        #card1 {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .card1-inner-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5px;
+            width: 100%;
+            height: 100%; /* Ensure the parent container has a defined height */
+            margin-bottom: 10px ;
+        }
+        
+        .card1-inner-item {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2);
+            padding: 10px;
+            height: 100%; /* Make the inner items fill the container vertically */
+        }
+
+        .card1-inner-item.right-content {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            margin-right: 10px;
+        }
+
+        .split-container {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .split-item {
+            flex: 1;
+            /*border: 1px solid #ccc; /* Optional: for visual separation */
+        }
+
+        .left-content {
+            margin-left: 10px;
+            margin-right: 0px;
+        }
+
+        .right-content {
+            margin-right: 10px;
+        }
+
+        /* Chart Container */
+        .chart-container {
+            flex: 1;
+            min-height: 0;
+            min-width: 0;
+        }
+        /* Dark Mode Styles */
+        body.dark-mode {
+            background-color: #121212;
+            color: #ffffff;
+        }
+        body.dark-mode header {
+            background-color: #1e1e1e;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+        }
+        body.dark-mode .container,
+        body.dark-mode .grid-container,
+        body.dark-mode .grid-container-item {
+            background-color: #1e1e1e;
+            color: #ffffff;
+        }
+        body.dark-mode .tablink {
+            background-color: #1e1e1e;
+            color: #ffffff;
+            border-radius: 5px;
+        }
+        body.dark-mode .tablink.active {
+            background-color: #3a3aff;
+            color: #ffffff;
+        }
+        body.dark-mode .tablink:hover {
+            background-color: #333333;
+        }
+        body.dark-mode .card-title {
+            color: #ffffff;
+        }
+        body.dark-mode .card-number {
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="tab-navigation">
+            <div class="tabs">
+                <button class="tablink active" onclick="openTab(event, 'tab1')">Overall Performance</button>
+                <!-- Removed 'Performance by Vendor' and 'Performance by PO' tabs -->
+                <button class="tablink" onclick="openTab(event, 'tab4')">Empty</button>
+            </div>
+            <label class="switch">
+                <input type="checkbox" id="darkModeToggle">
+                <span class="slider"></span>
+            </label>
+        </div>
+    </header>
+    <!-- Tab 1 Content -->
+<div id="tab1" class="tabcontent active">
+    <div class="row">
+        <!-- Top row with modified first container -->
+        <!-- Placed grid-container directly inside the row -->
+        <div class="grid-container">
+            <!-- Top rightmost container -->
+            <div class="grid-container-item" id="card1" style="box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2)">
+                <div class="card-title" style="box-shadow: none; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: bold;">Pending Information</div>
+                <div class="card1-inner-container">
+                    <div class="card1-inner-item left-content" style="background-color:rgb(189, 237, 255); box-shadow: none; display: flex; align-items: center; justify-content: center; font-size: 48px; -bottom: 10px;">153</div>
+                    <div class="card1-inner-item right-content" style="padding:0; box-shadow: none;">
+                        <div class="split-container" style="padding:0;">
+                            <div class="split-item" style="display: flex; align-items: center; box-shadow: none; justify-content: center; font-size: 16px; flex-direction: column; padding-top: 10px;">
+                                <span style="color: black; font-size: 16px;">
+                                    <span style="font-size: 30px; font-weight: bolder;">↑</span > <span style="font-size: 17px; font-weight: bold;">89(78%)</span>
+                                </span>
+                            </div>
+                            <div class="split-item" style="display: flex; align-items: center; box-shadow: none; justify-content: center; font-size: 14px; flex-direction: column; padding-bottom: 10px;">
+                                <span>vs.</span>
+                                <span>LAST WEEK</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Top left container -->
+            <div class="grid-container-item" id="card2" style="box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2)">
+                <div class="card-title" style="box-shadow: none; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: bold;">Under Vendor Review</div>
+                <div class="card1-inner-container">
+                    <div class="card1-inner-item left-content" style="background-color:rgb(44,175,254); box-shadow: none; display: flex; align-items: center; justify-content: center; font-size: 48px; -bottom: 10px;">53</div>
+                    <div class="card1-inner-item right-content" style="padding:0; box-shadow: none;">
+                        <div class="split-container" style="padding:0;">
+                            <div class="split-item" style="display: flex; align-items: center; box-shadow: none; justify-content: center; font-size: 16px; flex-direction: column; padding-top: 10px;">
+                                <span style="color: black; font-size: 16px;">
+                                    <span style="font-size: 30px; font-weight: bolder;">⇄</span > <span style="font-size: 17px; font-weight: bold;">0 (0%)</span>
+                                </span>
+                            </div>
+                            <div class="split-item" style="display: flex; align-items: center; box-shadow: none; justify-content: center; font-size: 14px; flex-direction: column; padding-bottom: 10px;">
+                                <span>vs.</span>
+                                <span>LAST WEEK</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Bottom right container -->
+            <div class="grid-container-item" id="card3" style="box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2)">
+                <div class="card-title" style="box-shadow: none; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: bold;">Under Customs Review</div>
+                <div class="card1-inner-container">
+                    <div class="card1-inner-item left-content" style="background-color:rgb(0,226,114); box-shadow: none; display: flex; align-items: center; justify-content: center; font-size: 48px; -bottom: 10px;">13</div>
+                    <div class="card1-inner-item right-content" style="padding:0; box-shadow: none;">
+                        <div class="split-container" style="padding:0;">
+                            <div class="split-item" style="display: flex; align-items: center; box-shadow: none; justify-content: center; font-size: 16px; flex-direction: column; padding-top: 10px;">
+                                <span style="color: green; font-size: 16px;">
+                                    <span style="font-size: 30px; font-weight: bolder;">↑</span > <span style="font-size: 17px; font-weight: bold;">35(23%)</span>
+                                </span>
+                            </div>
+                            <div class="split-item" style="display: flex; align-items: center; box-shadow: none; justify-content: center; font-size: 14px; flex-direction: column; padding-bottom: 10px;">
+                                <span>vs.</span>
+                                <span>LAST WEEK</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Bottom left container -->
+            <div class="grid-container-item" id="card4" style="box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2)">
+                <div class="card-title" style="box-shadow: none; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: bold;">Revision Required</div>
+                <div class="card1-inner-container">
+                    <div class="card1-inner-item left-content" style="background-color:red; box-shadow: none; display: flex; align-items: center; justify-content: center; font-size: 48px; -bottom: 10px;">23</div>
+                    <div class="card1-inner-item right-content" style="padding:0; box-shadow: none;">
+                        <div class="split-container" style="padding:0;">
+                            <div class="split-item" style="display: flex; align-items: center; box-shadow: none; justify-content: center; font-size: 16px; flex-direction: column; padding-top: 10px;">
+                                <span style="color: green; font-size: 16px;">
+                                    <span style="font-size: 30px; font-weight: bolder;">↓</span > <span style="font-size: 17px; font-weight: bold;">56(43%)</span>
+                                </span>
+                            </div>
+                            <div class="split-item" style="display: flex; align-items: center; box-shadow: none; justify-content: center; font-size: 14px; flex-direction: column; padding-bottom: 10px;">
+                                <span>vs.</span>
+                                <span>LAST WEEK</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+            <div class="container">
+                <!-- Added id for the donut chart container -->
+                <div id="container-donut-chart" class="chart-container"></div>
+            </div>
+            <div class="container">
+                <!-- Empty container 3 -->
+            </div>
+        </div>
+        <div class="row">
+            <!-- Middle row with charts -->
+            <div class="container">
+                <div id="container1-chart" class="chart-container"></div>
+            </div>
+            <div class="container">
+                <div id="container2-chart" class="chart-container"></div>
+            </div>
+            <div class="container">
+                <div id="container3-chart" class="chart-container"></div>
+            </div>
+        </div>
+        <div class="row">
+            <!-- Bottom row with the stacked area chart -->
+            <div class="container full">
+                <div id="container4-chart" class="chart-container"></div>
+            </div>
+        </div>
+    </div>
+    <!-- Tab 4 Content -->
+    <div id="tab4" class="tabcontent">
+        <div class="container full">Empty Content</div>
+    </div>
+    <script>
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            // Hide all tabcontent
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].classList.remove("active");
+            }
+            // Remove active class from all tablinks
+            tablinks = document.getElementsByClassName("tablink");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].classList.remove("active");
+            }
+            // Show the current tab
+            document.getElementById(tabName).classList.add("active");
+            // Add active class to the clicked tablink
+            evt.currentTarget.classList.add("active");
+
+            // Redraw charts when switching tabs
+            if (tabName === 'tab1') {
+                drawCharts();
+                populateCardNumbers();
+            }
+        }
+
+        // Dark mode toggle
+        document.getElementById('darkModeToggle').addEventListener('change', function() {
+            document.body.classList.toggle('dark-mode');
+        });
+
+        // Function to draw all charts in Tab 1
+        function drawCharts() {
+            drawDonutChart();
+            drawApparelTypeStackedColumnChart('container1-chart'); // First instance
+            drawApparelTypeStackedColumnChart('container2-chart'); // Second instance (duplicate)
+            drawApparelGroupStackedBarChart();
+            drawCumulativePerformanceAreaChart();
+        }
+
+        // Function to populate random numbers in the cards
+        function populateCardNumbers() {
+            document.getElementById('number-pending').textContent = Math.floor(Math.random() * 100);
+            document.getElementById('number-inprogress').textContent = Math.floor(Math.random() * 100);
+            document.getElementById('number-Under Customs Review').textContent = Math.floor(Math.random() * 100);
+            document.getElementById('number-Approved and Classified').textContent = Math.floor(Math.random() * 100);
+        }
+
+        // Function to draw the Highcharts Donut Chart with backend data
+        function drawDonutChart() {
+            fetch('http://localhost:5000/api/overall_performance_donut_chart')
+                .then(response => response.json())
+                .then(data => {
+                    // Map data to add colors based on the status name
+                    const dataWithColors = data.data.map(dataItem => {
+                        let color;
+                        if (dataItem.name === 'Under Customs Review') color = "rgb(44,175,254)";
+                        else if (dataItem.name === 'Approved and Classified') color = "rgb(0,226,114)";
+                        else if (dataItem.name === 'Revision Required') color = 'red';
+
+                        return { ...dataItem, color };
+                    });
+
+                    Highcharts.chart('container-donut-chart', { // Updated container id
+                        chart: {
+                            type: 'pie',
+                            backgroundColor: 'transparent'
+                        },
+                        title: {
+                            text: 'Overall Performance by Status',
+                            align: 'left',
+                            style: {
+                                fontSize: '15px'
+                            }
+                        },
+                        plotOptions: {
+                            pie: {
+                                innerSize: '45%', // Make it a donut chart
+                                dataLabels: {
+                                    enabled: true,
+                                    format: '{point.name}: {point.y}%',
+                                    style: {
+                                        fontSize: '10px'
+                                    }
+                                }
+                            }
+                        },
+                        series: [{
+                            name: 'Categories',
+                            data: dataWithColors // Use data with specific colors
+                        }],
+                        credits: {
+                            enabled: false
+                        },
+                        exporting: {
+                            enabled: true
+                        }
+                    });
+                })
+                .catch(error => console.log("Error fetching Donut chart data:", error));
+        }
+
+        // Function to draw the Highcharts Stacked Column Chart with backend data
+        function drawApparelTypeStackedColumnChart(containerId) {
+            fetch('http://localhost:5000/api/apparel_performance_top_5_stacked_column__chart')
+                .then(response => response.json())
+                .then(data => {
+                    // Map series data to add colors based on the status name
+                    const seriesWithColors = data.series.map(seriesItem => {
+                        let color;
+                        if (seriesItem.name === 'Under Customs Review') color = "rgb(44,175,254)";
+                        else if (seriesItem.name === 'Approved and Classified') color = "rgb(0,226,114)";
+                        else if (seriesItem.name === 'Revision Required') color = 'red';
+
+                        return { ...seriesItem, color };
+                    });
+                    Highcharts.chart(containerId, {
+                        chart: {
+                            type: 'column',
+                            backgroundColor: 'transparent',
+                        },
+                        title: {
+                            text: 'Performance by Apparel Type (Top 5) by Status',
+                            align: 'left',
+                            style: {
+                                fontSize: '15px'
+                            }
+                        },
+                        xAxis: {
+                            categories: data.categories, // Use categories from backend data
+                            title: {
+                                text: 'Apparel Type'
+                            },
+                            gridLineWidth: 1 // Show vertical grid lines
+                        },
+                        yAxis: {
+                            min: 0,
+                            title: { 
+                                text: 'Count' 
+                            },
+                            labels: {
+                                enabled: false // Hide Y-axis value labels
+                            },
+                            gridLineWidth: 0, // Hide horizontal grid lines
+                            stackLabels: {
+                                enabled: true,
+                                formatter: function () {
+                                    return Highcharts.numberFormat(this.total, 0); // Display as plain text
+                                },
+                                style: {
+                                    fontWeight: 'bold', // Remove bold style
+                                    color: 'black' // Use default color
+                                }
+                            }
+                        },
+                        legend: {
+                            align: 'right',
+                            verticalAlign: 'top',
+                            y: 1,
+                            floating: false,
+                            backgroundColor: 'white',
+                            borderColor: '#CCC',
+                            borderWidth: 1,
+                            shadow: false,
+                            itemStyle: {
+                                fontSize: '10px'
+                            },
+                            borderColor: null,
+                            borderWidth: 0,
+                        },
+                        tooltip: {
+                            headerFormat: '<b>{point.x}</b><br/>',
+                            pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+                        },
+                        plotOptions: {
+                            column: {
+                                stacking: 'normal',
+                                dataLabels: {
+                                    enabled: true
+                                }
+                            }
+                        },
+                        series: seriesWithColors, // Use series with specific colors
+                        credits: {
+                            enabled: false
+                        },
+                        exporting: {
+                            enabled: true
+                        }
+                    });
+                })
+                .catch(error => console.log("Error fetching stacked column chart data:", error));
+        }
+
+        // Function to draw the Highcharts Stacked Horizontal Bar Chart with backend data
+        function drawApparelGroupStackedBarChart() {
+            fetch('http://localhost:5000/api/apparel_group_performance_top_5_horizontal_stacked_bar_chart')
+                .then(response => response.json())
+                .then(data => {
+                    // Map series data to add colors based on the status name
+                    const seriesWithColors = data.series.map(seriesItem => {
+                        let color;
+                        if (seriesItem.name === 'Under Customs Review') color = "rgb(44,175,254)";
+                        else if (seriesItem.name === 'Approved and Classified') color = "rgb(0,226,114)";
+                        else if (seriesItem.name === 'Revision Required') color = 'red';
+
+                        return { ...seriesItem, color };
+                    });
+                    Highcharts.chart('container3-chart', {
+                        chart: {
+                            type: 'bar',
+                            backgroundColor: 'transparent'
+                        },
+                        title: {
+                            text: 'Performance by Apparel Group (Top 5) by Status',
+                            align: 'left',
+                            style: {
+                                fontSize: '15px'
+                            }
+                        },
+                        xAxis: {
+                            categories: data.categories, // Use categories from backend data
+                            gridLineWidth: 1, // Show vertical grid lines
+                            title: {
+                                text: 'Apparel Group'
+                            },
+                            labels: {
+                                formatter: function () {
+                                    return this.value.toUpperCase(); // Convert each label to uppercase
+                                },
+                                style: {
+                                    fontWeight: 'normal', // Adjust styling as needed
+                                    color: 'black' // Use default color
+                                }
+                            }
+                        },
+                        yAxis: {
+                            min: 0,
+                            gridLineWidth: 0, // Hide horizontal grid lines
+                            title: {
+                                text: 'Count'
+                            },
+                            labels: {
+                                enabled: false // Hide tick value labels
+                            },
+                            stackLabels: {
+                                enabled: true,
+                                formatter: function () {
+                                    return Highcharts.numberFormat(this.total, 0); // Display as plain text
+                                },
+                                style: {
+                                    fontWeight: 'bold', // Remove bold style
+                                    color: 'black' // Use default color
+                                }
+                            }
+                        },
+                        legend: {
+                            align: 'right',
+                            verticalAlign: 'top',
+                            y: 1,
+                            floating: false,
+                            backgroundColor: 'white',
+                            borderColor: '#CCC',
+                            borderWidth: 1,
+                            shadow: false,
+                            itemStyle: {
+                                fontSize: '10px'
+                            },
+                            borderColor: null,
+                            borderWidth: 0,
+                        },
+                        tooltip: {
+                            headerFormat: '<b>{point.x}</b><br/>',
+                            pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+                        },
+                        plotOptions: {
+                            bar: {
+                                stacking: 'normal',
+                                dataLabels: {
+                                    enabled: true
+                                }
+                            }
+                        },
+                        series: seriesWithColors, // Use series with specific colors
+                        credits: {
+                            enabled: false
+                        },
+                        exporting: {
+                            enabled: true
+                        }
+                    });
+                })
+                .catch(error => console.log("Error fetching stacked bar chart data:", error));
+        }
+
+        // Function to draw the Highcharts Stacked Area Chart with backend data
+        function drawCumulativePerformanceAreaChart() {
+            fetch('http://localhost:5000/api/cumulative_performance_spline_line_chart')
+                .then(response => response.json())
+                .then(data => {
+                    // Map series data to add colors based on the status name
+                    const seriesWithColors = data.series.map(seriesItem => {
+                        let color;
+                        if (seriesItem.name === 'Under Customs Review') color = "rgb(44,175,254)";
+                        else if (seriesItem.name === 'Approved and Classified') color = "rgb(0,226,114)";
+                        else if (seriesItem.name === 'Revision Required') color = 'red';
+
+                        return { ...seriesItem, color };
+                    });
+                    Highcharts.chart('container4-chart', {
+                        chart: {
+                            type: 'area',
+                            backgroundColor: 'transparent'
+                        },
+                        title: {
+                            text: 'Cumulative Performance to Date (Last 7 Days) by Status',
+                            align: 'left',
+                            style: {
+                                fontSize: '15px'
+                            }
+                        },
+                        xAxis: {
+                            categories: data.categories, // Use categories (dates) from backend data
+                            gridLineWidth: 1, // Show vertical grid lines
+                            title: {
+                                text: 'Day'
+                            },
+                            labels: {
+                                rotation: 0,
+                                align: 'right'
+                            }
+                        },
+                        yAxis: {
+                            min: 0,
+                            gridLineWidth: 0, // Hide horizontal grid lines 
+                            title: {
+                                text: 'Count'
+                            },
+                            labels: {
+                                enabled: false // Hide Y-axis value labels
+                            },
+                        },
+                        legend: {
+                            align: 'right',
+                            verticalAlign: 'top',
+                            y: 1,
+                            floating: false,
+                            backgroundColor: 'white',
+                            borderColor: '#CCC',
+                            borderWidth: 1,
+                            shadow: false,
+                            itemStyle: {
+                                fontSize: '10px'
+                            },
+                            borderColor: null,
+                            borderWidth: 0,
+                        },
+                        tooltip: {
+                            shared: true,
+                            crosshairs: true,
+                            headerFormat: '<b>{point.key}</b><br/>',
+                        },
+                        plotOptions: {
+                            area: {
+                                stacking: 'normal',
+                                marker: {
+                                    enabled: true
+                                },
+                                dataLabels: {
+                                    enabled: true,
+                                    formatter: function () {
+                                        return this.y > 0 ? this.y : null;
+                                    },
+                                    style: {
+                                        textOutline: 'none',
+                                        fontWeight: 'normal'
+                                    }
+                                }
+                            }
+                        },
+                        series: seriesWithColors, // Use series with specific colors
+                        credits: {
+                            enabled: false
+                        },
+                        exporting: {
+                            enabled: true
+                        }
+                    });
+                })
+                .catch(error => console.log("Error fetching area chart data:", error));
+        }
+
+        // Draw charts on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            drawCharts();
+        });
+
+        // Redraw charts on window resize
+        window.addEventListener('resize', function() {
+            if (document.getElementById('tab1').classList.contains('active')) {
+                drawCharts();
+            }
+        });
+    </script>
+</body>
+</html>
