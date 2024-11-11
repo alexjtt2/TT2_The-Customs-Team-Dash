@@ -13,7 +13,7 @@ ODBC_CONNECTION_STRING = (
     'Trusted_Connection=yes;'
 )
 
-# SQL Query for the Donut Chart
+# SQL Query for the Donut Chart 
 DONUT_CHART_QUERY = """
 SELECT 
     ps.Description AS Status_Name,
@@ -29,8 +29,8 @@ LEFT JOIN
 LEFT JOIN
     [DemoTT2MandSMasterTest].[dbo].[ProductGroup] pg ON lit.ProductGroupId = pg.Id
 WHERE 
-    ps.Description IN ('Revision Required', 'Under Customs Review', 'Approved and Classified')  
-	AND CAST(p.DateSubmitted AS DATE) = '2024-09-30'
+    ps.Description IN ('Pending Information', 'Approved and Classified', 'Under Vendor Review', 'Revision Required', 'Under Customs Review')
+    AND COALESCE(CAST(p.DateSubmitted AS DATE), CAST(p.CreatedAt AS DATE)) = '2024-09-05'
 GROUP BY 
     ps.Description
 ORDER BY 
