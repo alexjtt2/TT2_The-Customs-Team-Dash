@@ -158,27 +158,34 @@ def get_overall_performance_donut_chart():
             cursor.execute(DONUT_CHART_QUERY)
             rows = cursor.fetchall()
 
+            # Compute the total count
+            total_count = sum(row.Status_Count for row in rows)
+
             # Process the fetched data into a format suitable for the donut chart
             data = []
             for row in rows:
                 product_status = row.Status_Name
                 count = row.Status_Count
+                percentage = (count / total_count) * 100 if total_count > 0 else 0
                 data.append({
                     'name': product_status,
-                    'y': count
+                    'y': count,
+                    'percentage': percentage
                 })
 
             # Return the result as JSON
             response = {
-                'data': data
+                'data': data,
+                'total': total_count
             }
 
             return jsonify(response), 200
 
     except Exception as e:
-        # Log the exception (you can enhance this for better logging)
+        # Log the exception
         print(f"Error in /api/overall_performance_donut_chart: {e}")
         return jsonify({'error': 'An error occurred while fetching the donut chart data.'}), 500
+
 
 @app.route('/api/apparel_performance_top_5_stacked_column__chart', methods=['GET'])
 def get_apparel_performance_top_5_stacked_column__chart():
