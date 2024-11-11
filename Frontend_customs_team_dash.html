@@ -452,6 +452,8 @@
                         if (dataItem.name === 'Under Customs Review') color = "rgb(44,175,254)";
                         else if (dataItem.name === 'Approved and Classified') color = "rgb(0,226,114)";
                         else if (dataItem.name === 'Revision Required') color = 'red';
+                        else if (dataItem.name === 'Pending Information') color = 'rgb(189, 237, 255)';
+                        else if (dataItem.name === 'Under Vendor Review') color = 'rgb(44,175,254)';
 
                         return { ...dataItem, color };
                     });
@@ -470,10 +472,10 @@
                         },
                         plotOptions: {
                             pie: {
-                                innerSize: '45%', // Make it a donut chart
+                                innerSize: '30%', // Make it a donut chart
                                 dataLabels: {
                                     enabled: true,
-                                    format: '{point.name}: {point.y}%',
+                                    format: '{point.name}: </br> {point.percentage:.1f}%', // Format percentage to one decimal place
                                     style: {
                                         fontSize: '10px'
                                     }
