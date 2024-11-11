@@ -68,7 +68,7 @@ ORDER BY
 """
 
 # SQL Query for the Stacked Horizontal Bar Chart (Performance by Apparel Group)
-STACKED_HORIZONTAL_BAR_CHART_QUERY_PERFORMANCE_BY_APPAREL_GROUP_TOP_5 = """
+STACKED_HORIZONTAL_BAR_CHART_QUERY_PERFORMANCE_BY_APPAREL_GROUP_TOP_10 = """
 WITH ApparelGroupCounts AS (
     SELECT 
         pg.Description AS ApparelGroup_Name,
@@ -85,8 +85,8 @@ WITH ApparelGroupCounts AS (
     LEFT JOIN
         [DemoTT2MandSMasterTest].[dbo].[ProductGroup] pg ON lit.ProductGroupId = pg.Id
     WHERE 
-        ps.Description IN ('Revision Required', 'Under Customs Review', 'Approved and Classified')  
-        AND CAST(p.DateSubmitted AS DATE) = '2024-09-30'
+        ps.Description IN ('Pending Information', 'Approved and Classified', 'Under Vendor Review', 'Revision Required', 'Under Customs Review')
+        AND COALESCE(CAST(p.DateSubmitted AS DATE), CAST(p.CreatedAt AS DATE)) = '2024-09-05'
     GROUP BY 
         pg.Description, 
         ps.Description
@@ -107,7 +107,7 @@ SELECT
 FROM 
     ApparelGroupCounts agc
 INNER JOIN 
-    (SELECT TOP 5 ApparelGroup_Name, Total_Count FROM TotalCounts ORDER BY Total_Count DESC) tc 
+    (SELECT TOP 10 ApparelGroup_Name, Total_Count FROM TotalCounts ORDER BY Total_Count DESC) tc 
     ON agc.ApparelGroup_Name = tc.ApparelGroup_Name
 ORDER BY 
     tc.Total_Count DESC, 
@@ -319,32 +319,44 @@ def get_apparel_group_performance_top_5_horizontal_stacked_bar_chart():
         # Establish connection to SQL Server
         with pyodbc.connect(ODBC_CONNECTION_STRING) as conn:
             cursor = conn.cursor()
-            cursor.execute(STACKED_HORIZONTAL_BAR_CHART_QUERY_PERFORMANCE_BY_APPAREL_GROUP_TOP_5)
+            cursor.execute(STACKED_HORIZONTAL_BAR_CHART_QUERY_PERFORMANCE_BY_APPAREL_GROUP_TOP_10)
             rows = cursor.fetchall()
 
             # Process the fetched data for the stacked horizontal bar chart
             data = {}
+            total_counts = {}
+            status_names_set = set()  # Collect unique status names
             for row in rows:
                 apparel_group = row.ApparelGroup_Name
                 status_name = row.Status_Name
                 count = row.Status_Count
 
+                status_names_set.add(status_name)  # Add status name to the set
+
                 if apparel_group not in data:
                     data[apparel_group] = {}
+                    total_counts[apparel_group] = 0
 
                 data[apparel_group][status_name] = count
+                total_counts[apparel_group] += count
 
-            # Prepare the categories and series for the chart
-            categories = list(data.keys())
-            status_names = ['Revision Required', 'Under Customs Review', 'Approved and Classified']
+            # Sort categories based on total count in descending order
+            categories = sorted(total_counts.keys(), key=lambda x: total_counts[x], reverse=True)
+
+            # Convert the set of status names to a sorted list
+            status_names = sorted(status_names_set)
+
+            # Build the series data using the dynamic list of status names
             series = []
             for status in status_names:
                 series_data = []
                 for category in categories:
-                    count = data[category].get(status, None)  # Use None instead of 0
-                    if count is not None:
+                    count = data[category].get(status, None)  # Get count or None
+                    if count not in [None, 0]:
                         series_data.append(count)
-                if series_data:  # Only add series if it has data
+                    else:
+                        series_data.append(None)  # Maintain alignment with categories
+                if any(value is not None for value in series_data):  # Only add series if it has non-None data
                     series.append({
                         'name': status,
                         'data': series_data
@@ -361,6 +373,7 @@ def get_apparel_group_performance_top_5_horizontal_stacked_bar_chart():
     except Exception as e:
         print(f"Error in /api/apparel_group_performance_top_5_horizontal_stacked_bar_chart: {e}")
         return jsonify({'error': 'An error occurred while fetching the apparel group performance data.'}), 500
+
 
 @app.route('/api/cumulative_performance_spline_line_chart', methods=['GET'])
 def get_cumulative_performance_spline_line_chart():
