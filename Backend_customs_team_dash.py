@@ -142,89 +142,6 @@ ORDER BY
     ps.Description;
 """
 
-# SQL Query for Vendor Performance (Performance by Vendor - Stacked Horizontal Bar Chart)
-VENDOR_PERFORMANCE_QUERY = """
-SELECT 
-	v.CompanyName AS Vendor_Name,	
-    ps.Description AS Status_Name,
-    COUNT(p.Id) AS Status_Count
-FROM 
-    [DemoTT2MandSMasterTest].[dbo].[Product] p
-INNER JOIN 
-    [DemoTT2MandSMasterTest].[dbo].[ApparelType] at ON p.ApparelTypeId = at.Id
-INNER JOIN 
-    [DemoTT2MandSMasterTest].[dbo].[ProductStatus] ps ON p.ProductStatusId = ps.Id
-INNER JOIN
-    [DemoTT2MandSMasterTest].[dbo].[Vendor] v ON p.VendorId = v.Id
-LEFT JOIN
-    [DemoTT2MandSMasterTest].[dbo].[ProductItemSet] pis ON pis.ProductId = p.Id
-LEFT JOIN
-    [DemoTT2MandSMasterTest].[dbo].[LegacyItemType] lit ON pis.LegacyItemTypeId = lit.Id
-LEFT JOIN
-    [DemoTT2MandSMasterTest].[dbo].[ProductGroup] pg ON lit.ProductGroupId = pg.Id
-WHERE 
-    ps.Description IN ('Revision Required', 'Under Customs Review', 'Approved and Classified')  
-    AND CAST(p.DateSubmitted AS DATE) = '2024-09-30'
-GROUP BY 
-	v.CompanyName,
-    ps.Description
-ORDER BY
-	v.CompanyName,
-    ps.Description;
-"""
-
-# SQL Query for Gantt Chart (Grouping in a Hierarchy)
-GANTT_CHART_QUERY = """
-SELECT 
-    po.[OrderNumber] AS PO_No,
-    CONCAT(
-        '#', ol.LegacyLineID, ' / ',
-        'ID: ', ol.Id, ' / ',
-        'UPC: ', ol.UniqueProductCode, ' / ',
-        pg.Description, ' / ',
-        p.Description, ' / ',
-        'Qty: ', ol.OrderQuantity, ' / ',
-        'Size: ', ol.PrimarySize
-    ) AS PO_Details,
-    ps.Description AS Product_Status,
-    FORMAT(lit.CreatedAt, 'dd-MM-yy') AS CreatedAt,
-    FORMAT(p.DateSubmitted, 'dd-MM-yy') AS DateSubmitted,
-    FORMAT(p.DateCompleted, 'dd-MM-yy') AS DateCompleted,
-    FORMAT(po.DeliveryDate, 'dd-MM-yy') AS DeliveryDate,
-    v.CompanyName AS Vendor
-FROM 
-    [DemoTT2MandSMasterTest].[dbo].[PurchaseOrder] po
-INNER JOIN 
-    [DemoTT2MandSMasterTest].[dbo].[Vendor] v ON po.VendorId = v.Id
-INNER JOIN 
-    [DemoTT2MandSMasterTest].[dbo].[OrderStatus] os ON po.OrderStatusId = os.Id
-INNER JOIN
-    [DemoTT2MandSMasterTest].[dbo].[OrderStatusType] ost ON po.OrderStatusTypeId = ost.Id
-INNER JOIN
-    [DemoTT2MandSMasterTest].[dbo].[OrderType] ot ON po.OrderTypeId = ot.Id 
-INNER JOIN
-    [DemoTT2MandSMasterTest].[dbo].[PackType] pt ON po.PackTypeId = pt.Id
-INNER JOIN
-    [DemoTT2MandSMasterTest].[dbo].[Department] dp ON po.DepartmentId = dp.Id
-INNER JOIN
-    [DemoTT2MandSMasterTest].[dbo].[OrderLine] ol ON po.Id = ol.OrderId
-INNER JOIN
-    [DemoTT2MandSMasterTest].[dbo].[Product] p ON ol.ProductId = p.Id
-INNER JOIN
-    [DemoTT2MandSMasterTest].[dbo].[ProductStatus] ps ON p.ProductStatusId = ps.Id
-INNER JOIN
-    [DemoTT2MandSMasterTest].[dbo].[ProductItemSet] pis ON ol.ProductId = pis.ProductId
-INNER JOIN
-    [DemoTT2MandSMasterTest].[dbo].[LegacyItemType] lit ON pis.LegacyItemTypeId = lit.Id
-INNER JOIN
-    [DemoTT2MandSMasterTest].[dbo].[ProductGroup] pg ON lit.ProductGroupId = pg.Id
-WHERE 
-    CAST(p.DateSubmitted AS DATE) BETWEEN DATEADD(DAY, -1, '2024-09-30') AND '2024-09-30'
-    AND po.OrderNumber IN ('2031074392', '2031073674')
-ORDER BY 
-    po.[OrderNumber] DESC;
-"""
-
 @app.route('/api/overall_performance_donut_chart', methods=['GET'])
 def get_overall_performance_donut_chart():
     try:
@@ -374,7 +291,6 @@ def get_apparel_group_performance_top_5_horizontal_stacked_bar_chart():
         print(f"Error in /api/apparel_group_performance_top_5_horizontal_stacked_bar_chart: {e}")
         return jsonify({'error': 'An error occurred while fetching the apparel group performance data.'}), 500
 
-
 @app.route('/api/cumulative_performance_spline_line_chart', methods=['GET'])
 def get_cumulative_performance_spline_line_chart():
     try:
@@ -409,62 +325,7 @@ def get_cumulative_performance_spline_line_chart():
         print(f"Error in /api/cumulative_performance_spline_line_chart: {e}")
         return jsonify({'error': 'An error occurred while fetching the cumulative performance data.'}), 500
 
-@app.route('/api/vendor_performance', methods=['GET'])
-def get_vendor_performance():
-    try:
-        # Establish connection to SQL Server
-        with pyodbc.connect(ODBC_CONNECTION_STRING) as conn:
-            cursor = conn.cursor()
-            cursor.execute(VENDOR_PERFORMANCE_QUERY)
-            rows = cursor.fetchall()
 
-            # Process the fetched data for the chart
-            data = {}
-            total_counts = {}
-            for row in rows:
-                vendor_name = row.Vendor_Name
-                status_name = row.Status_Name
-                count = row.Status_Count
-
-                if vendor_name not in data:
-                    data[vendor_name] = {}
-                    total_counts[vendor_name] = 0
-
-                data[vendor_name][status_name] = count
-                total_counts[vendor_name] += count
-
-            # Sort vendors by total count in descending order
-            sorted_vendors = sorted(total_counts.keys(), key=lambda x: total_counts[x], reverse=True)
-
-            # Prepare the categories and series for the chart
-            categories = sorted_vendors
-            status_names = ['Revision Required', 'Under Customs Review', 'Approved and Classified']
-            series = []
-            for status in status_names:
-                series_data = []
-                for category in categories:
-                    count = data[category].get(status, 0)  # Use 0 instead of None
-                    series_data.append(count)
-                series.append({
-                    'name': status,
-                    'data': series_data
-                })
-
-            # Structure the final JSON response
-            response = {
-                'categories': categories,
-                'series': series
-            }
-
-            return jsonify(response), 200
-
-    except Exception as e:
-        print(f"Error in /api/vendor_performance: {e}")
-        return jsonify({'error': 'An error occurred while fetching the vendor performance data.'}), 500
-
-
-@app.route('/api/gantt_chart', methods=['GET'])
-def get_gantt_chart_data():
     try:
         # Connect to SQL Server
         with pyodbc.connect(ODBC_CONNECTION_STRING) as conn:
