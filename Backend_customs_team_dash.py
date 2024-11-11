@@ -118,7 +118,7 @@ ORDER BY
 # SQL Query for the Cumulative Performance (Spline Line Chart)
 CUMULATIVE_PERFORMANCE_QUERY_SPLINE_LINE_CHART = """
 SELECT 
-    CAST(p.DateSubmitted AS DATE) AS Submitted_Date,
+    COALESCE(CAST(p.DateSubmitted AS DATE), CAST(p.CreatedAt AS DATE)) AS Date_For_Status,
     ps.Description AS Status_Name,
     COUNT(p.Id) AS Status_Count
 FROM 
@@ -132,13 +132,20 @@ LEFT JOIN
 LEFT JOIN
     [DemoTT2MandSMasterTest].[dbo].[ProductGroup] pg ON lit.ProductGroupId = pg.Id
 WHERE 
-    ps.Description IN ('Pending Information','Under Vendor Review', 'Revision Required', 'Under Customs Review', 'Approved and Classified')  
-    AND CAST(p.DateSubmitted AS DATE) BETWEEN DATEADD(DAY, -7, '2024-09-30') AND '2024-09-30'
+    ps.Description IN ('Pending Information', 'Approved and Classified', 'Under Vendor Review', 'Revision Required', 'Under Customs Review')
+    AND (
+        (CAST(p.DateSubmitted AS DATE) BETWEEN DATEADD(DAY, -7, '2024-09-05') AND '2024-09-05')
+        OR 
+        (CAST(p.CreatedAt AS DATE) BETWEEN DATEADD(DAY, -7, '2024-09-05') AND '2024-09-05')
+    )
+    AND ps.Description != 'CANCELLED'
 GROUP BY 
     ps.Description,
-    CAST(p.DateSubmitted AS DATE)
+    COALESCE(CAST(p.DateSubmitted AS DATE), CAST(p.CreatedAt AS DATE))
+HAVING 
+    COALESCE(CAST(p.DateSubmitted AS DATE), CAST(p.CreatedAt AS DATE)) BETWEEN DATEADD(DAY, -7, '2024-09-05') AND '2024-09-05'
 ORDER BY 
-    Submitted_Date, 
+    Date_For_Status, 
     ps.Description;
 """
 
@@ -301,24 +308,35 @@ def get_cumulative_performance_spline_line_chart():
 
             # Organize data by date and status
             data = {}
+            status_names_set = set()  # Collect unique status names
             for row in rows:
-                submitted_date = str(row.Submitted_Date) # Format the date
+                submitted_date = str(row.Date_For_Status)  # Format the date as a string
                 status_name = row.Status_Name
                 count = row.Status_Count
+
+                status_names_set.add(status_name)  # Add status name to the set
+
                 if submitted_date not in data:
                     data[submitted_date] = {}
+
                 data[submitted_date][status_name] = count
 
             # Prepare dates and series for the line chart
             dates = sorted(data.keys())
-            status_names = ['Revision Required', 'Under Customs Review', 'Approved and Classified']
+            status_names = sorted(status_names_set)
+
+            # Build the series data using the dynamic list of status names
             series = []
             for status in status_names:
-                series_data = [data[date].get(status, 0) for date in dates]
+                series_data = []
+                for date in dates:
+                    count = data[date].get(status, 0)  # Get count or 0
+                    series_data.append(count)
                 series.append({'name': status, 'data': series_data})
 
-            # Return the result in the format Highcharts expects
+            # Log the response for debugging
             response = {'categories': dates, 'series': series}
+            print("API Response:", response)
             return jsonify(response), 200
 
     except Exception as e:
@@ -326,48 +344,6 @@ def get_cumulative_performance_spline_line_chart():
         return jsonify({'error': 'An error occurred while fetching the cumulative performance data.'}), 500
 
 
-    try:
-        # Connect to SQL Server
-        with pyodbc.connect(ODBC_CONNECTION_STRING) as conn:
-            cursor = conn.cursor()
-            cursor.execute(GANTT_CHART_QUERY)
-            rows = cursor.fetchall()
-
-            # Organize data in a parent-child structure
-            data = {}
-            for row in rows:
-                po_number = row.PO_No
-                po_details = row.PO_Details
-                vendor = row.Vendor
-                created_at = row.CreatedAt
-                delivery_date = row.DeliveryDate
-
-                if po_number not in data:
-                    data[po_number] = {
-                        'id': po_number,
-                        #'name': po_number,
-                        'start': created_at,
-                        'end': delivery_date,
-                        'vendor': vendor,
-                        'collapsed': True,
-                        'children': []
-                    }
-
-                # Append PO_Details as a child entry
-                data[po_number]['children'].append({
-                    'id': po_details,
-                    #'name': po_details,
-                    'start': created_at,
-                    'end': delivery_date,
-                    'parent': po_number
-                })
-
-            response = {'data': list(data.values())}
-            return jsonify(response), 200
-
-    except Exception as e:
-        print(f"Error in /api/gantt_chart: {e}")
-        return jsonify({'error': 'An error occurred while fetching the Gantt chart data.'}), 500
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
