@@ -38,7 +38,7 @@ ORDER BY
 """
 
 # SQL Query for the Stacked Column Chart
-STACKED_COLUMN_CHART_QUERY_PERFORMANCE_BY_APPAREL_TYPE_TOP_5 = """
+STACKED_COLUMN_CHART_QUERY_PERFORMANCE_BY_APPAREL_TYPE_TOP_10 = """
 SELECT 
     at.Description AS ApparelType_Name,
     ps.Description AS Status_Name,
@@ -56,8 +56,9 @@ LEFT JOIN
 LEFT JOIN
     [DemoTT2MandSMasterTest].[dbo].[ProductGroup] pg ON lit.ProductGroupId = pg.Id
 WHERE 
-    ps.Description IN ('Revision Required', 'Under Customs Review', 'Approved and Classified')  
-    AND CAST(p.DateSubmitted AS DATE) = '2024-09-30'
+    ps.Description IN ('Pending Information', 'Approved and Classified', 'Under Vendor Review', 'Revision Required', 'Under Customs Review')
+    AND COALESCE(CAST(p.DateSubmitted AS DATE), CAST(p.CreatedAt AS DATE)) = '2024-09-05'
+    AND at.Description != 'UNDEFINED'
 GROUP BY 
     at.Description, 
     ps.Description
@@ -261,28 +262,34 @@ def get_apparel_performance_top_5_stacked_column__chart():
         # Establish connection to SQL Server
         with pyodbc.connect(ODBC_CONNECTION_STRING) as conn:
             cursor = conn.cursor()
-            cursor.execute(STACKED_COLUMN_CHART_QUERY_PERFORMANCE_BY_APPAREL_TYPE_TOP_5)
+            cursor.execute(STACKED_COLUMN_CHART_QUERY_PERFORMANCE_BY_APPAREL_TYPE_TOP_10)
             rows = cursor.fetchall()
 
             # Process the fetched data for the stacked column chart
             data = {}
             total_counts = {}
+            status_names_set = set()  # Collect unique status names
             for row in rows:
                 apparel_type = row.ApparelType_Name
                 status_name = row.Status_Name
                 count = row.Status_Count
 
+                status_names_set.add(status_name)  # Add status name to the set
+
                 if apparel_type not in data:
                     data[apparel_type] = {}
                     total_counts[apparel_type] = 0
-                
+
                 data[apparel_type][status_name] = count
                 total_counts[apparel_type] += count
 
             # Sort categories based on total count in descending order
             sorted_categories = sorted(total_counts.keys(), key=lambda x: total_counts[x], reverse=True)
 
-            status_names = ['Revision Required', 'Under Customs Review', 'Approved and Classified']
+            # Convert the set of status names to a sorted list
+            status_names = sorted(status_names_set)
+
+            # Build the series data using the dynamic list of status names
             series = []
             for status in status_names:
                 series_data = []
