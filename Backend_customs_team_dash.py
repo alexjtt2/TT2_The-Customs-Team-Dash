@@ -13,6 +13,76 @@ ODBC_CONNECTION_STRING = (
     'Trusted_Connection=yes;'
 )
 
+# Define the SQL query for KPI cards
+KPI_CARDS_QUERY = """
+WITH StatusCounts AS (
+    SELECT 
+        COALESCE(CAST(p.DateSubmitted AS DATE), CAST(p.CreatedAt AS DATE)) AS Date_For_Status,
+        ps.Description AS Status_Name,
+        COUNT(p.Id) AS Status_Count
+    FROM 
+        [DemoTT2MandSMasterTest].[dbo].[Product] p
+    INNER JOIN 
+        [DemoTT2MandSMasterTest].[dbo].[ProductStatus] ps ON p.ProductStatusId = ps.Id
+    LEFT JOIN
+        [DemoTT2MandSMasterTest].[dbo].[ProductItemSet] pis ON pis.ProductId = p.Id
+    LEFT JOIN
+        [DemoTT2MandSMasterTest].[dbo].[LegacyItemType] lit ON pis.LegacyItemTypeId = lit.Id
+    LEFT JOIN
+        [DemoTT2MandSMasterTest].[dbo].[ProductGroup] pg ON lit.ProductGroupId = pg.Id
+    WHERE 
+        ps.Description IN ('Pending Information', 'Under Vendor Review', 'Revision Required', 'Under Customs Review')
+        AND (
+            (CAST(p.DateSubmitted AS DATE) BETWEEN DATEADD(DAY, -7, '2024-09-05') AND '2024-09-05')
+            OR 
+            (CAST(p.CreatedAt AS DATE) BETWEEN DATEADD(DAY, -7, '2024-09-05') AND '2024-09-05')
+        )
+        AND ps.Description != 'CANCELLED'
+    GROUP BY 
+        ps.Description,
+        COALESCE(CAST(p.DateSubmitted AS DATE), CAST(p.CreatedAt AS DATE))
+),
+EarliestCounts AS (
+    SELECT 
+        Status_Name,
+        MIN(Date_For_Status) AS Earliest_Date,
+        Status_Count AS Earliest_Count
+    FROM 
+        StatusCounts
+    WHERE 
+        Date_For_Status = (SELECT MIN(Date_For_Status) FROM StatusCounts AS sc WHERE sc.Status_Name = StatusCounts.Status_Name)
+    GROUP BY 
+        Status_Name, Status_Count
+),
+LatestCounts AS (
+    SELECT 
+        Status_Name,
+        MAX(Date_For_Status) AS Latest_Date,
+        Status_Count AS Latest_Count
+    FROM 
+        StatusCounts
+    WHERE 
+        Date_For_Status = (SELECT MAX(Date_For_Status) FROM StatusCounts AS sc WHERE sc.Status_Name = StatusCounts.Status_Name)
+    GROUP BY 
+        Status_Name, Status_Count
+)
+SELECT 
+    e.Status_Name,
+    e.Earliest_Count,
+    l.Latest_Count,
+    (l.Latest_Count - e.Earliest_Count) AS Count_Change,
+    CASE 
+        WHEN e.Earliest_Count = 0 THEN NULL
+        ELSE CAST((l.Latest_Count - e.Earliest_Count) * 100.0 / e.Earliest_Count AS DECIMAL(10, 2))
+    END AS Percentage_Change
+FROM 
+    EarliestCounts e
+JOIN 
+    LatestCounts l ON e.Status_Name = l.Status_Name
+ORDER BY 
+    e.Status_Name;
+"""
+
 # SQL Query for the Donut Chart 
 DONUT_CHART_QUERY = """
 SELECT 
@@ -114,6 +184,89 @@ ORDER BY
     agc.ApparelGroup_Name, 
     agc.Status_Name;
 """
+
+# SQL Query for the Stacked Column Chart (Performance by Item Type)
+STACKED_COLUMN_CHART_QUERY_PERFORMANCE_BY_ITEM_TYPE_TOP_10 = """
+WITH ApparelGroupCounts AS (
+    SELECT 
+        lit.ItemType AS ItemType_Name,
+        ps.Description AS Status_Name,
+        COUNT(*) AS Status_Count
+    FROM 
+        [DemoTT2MandSMasterTest].[dbo].[Product] p
+    INNER JOIN 
+        [DemoTT2MandSMasterTest].[dbo].[ProductStatus] ps ON p.ProductStatusId = ps.Id
+    LEFT JOIN
+        [DemoTT2MandSMasterTest].[dbo].[ProductItemSet] pis ON pis.ProductId = p.Id
+    LEFT JOIN
+        [DemoTT2MandSMasterTest].[dbo].[LegacyItemType] lit ON pis.LegacyItemTypeId = lit.Id
+    LEFT JOIN
+        [DemoTT2MandSMasterTest].[dbo].[ProductGroup] pg ON lit.ProductGroupId = pg.Id
+    WHERE 
+        ps.Description IN ('Pending Information', 'Under Vendor Review', 'Revision Required', 'Under Customs Review')
+        AND COALESCE(CAST(p.DateSubmitted AS DATE), CAST(p.CreatedAt AS DATE)) = '2024-09-05'
+    GROUP BY 
+        lit.ItemType, 
+        ps.Description
+),
+TotalCounts AS (
+    SELECT 
+        ItemType_Name,
+        SUM(Status_Count) AS Total_Count
+    FROM 
+        ApparelGroupCounts
+    GROUP BY 
+        ItemType_Name
+)
+SELECT 
+    agc.ItemType_Name,
+    agc.Status_Name,
+    agc.Status_Count
+FROM 
+    ApparelGroupCounts agc
+INNER JOIN 
+    (SELECT TOP 10 ItemType_Name, Total_Count FROM TotalCounts ORDER BY Total_Count DESC) tc 
+    ON agc.ItemType_Name = tc.ItemType_Name
+ORDER BY 
+    tc.Total_Count DESC, 
+    agc.ItemType_Name, 
+    agc.Status_Name;
+"""
+
+@app.route('/api/kpi_cards', methods=['GET'])
+def get_kpi_cards():
+    try:
+        # Establish connection to SQL Server
+        with pyodbc.connect(ODBC_CONNECTION_STRING) as conn:
+            cursor = conn.cursor()
+            cursor.execute(KPI_CARDS_QUERY)
+            rows = cursor.fetchall()
+    
+            # Process the fetched data into a format suitable for the frontend
+            data = []
+            for row in rows:
+                status_name = row.Status_Name.strip()
+                earliest_count = row.Earliest_Count
+                latest_count = row.Latest_Count
+                count_change = row.Count_Change
+                percentage_change = row.Percentage_Change
+                if percentage_change is not None:
+                    percentage_change = float(percentage_change)
+                else:
+                    percentage_change = 0.0  # Handle NULL percentage change
+    
+                data.append({
+                    'status_name': status_name,
+                    'earliest_count': earliest_count,
+                    'latest_count': latest_count,
+                    'count_change': count_change,
+                    'percentage_change': percentage_change
+                })
+            # Return the result as JSON
+            return jsonify(data), 200
+    except Exception as e:
+        print(f"Error in /api/kpi_cards: {e}")
+        return jsonify({'error': 'An error occurred while fetching the KPI cards data.'}), 500
 
 # SQL Query for the Cumulative Performance (Spline Line Chart)
 CUMULATIVE_PERFORMANCE_QUERY_SPLINE_LINE_CHART = """
@@ -304,6 +457,68 @@ def get_apparel_group_performance_top_5_horizontal_stacked_bar_chart():
     except Exception as e:
         print(f"Error in /api/apparel_group_performance_top_5_horizontal_stacked_bar_chart: {e}")
         return jsonify({'error': 'An error occurred while fetching the apparel group performance data.'}), 500
+
+@app.route('/api/item_type_performance_top_5_stacked_column_chart', methods=['GET'])
+def get_item_type_performance_top_5_stacked_column_chart():
+    try:
+        # Establish connection to SQL Server
+        with pyodbc.connect(ODBC_CONNECTION_STRING) as conn:
+            cursor = conn.cursor()
+            cursor.execute(STACKED_COLUMN_CHART_QUERY_PERFORMANCE_BY_ITEM_TYPE_TOP_10)
+            rows = cursor.fetchall()
+
+            # Process the fetched data for the stacked bar chart
+            data = {}
+            total_counts = {}
+            status_names_set = set()  # Collect unique status names
+            for row in rows:
+                item_type = row.ItemType_Name
+                status_name = row.Status_Name
+                count = row.Status_Count
+
+                status_names_set.add(status_name)  # Add status name to the set
+
+                if item_type not in data:
+                    data[item_type] = {}
+                    total_counts[item_type] = 0
+
+                data[item_type][status_name] = count
+                total_counts[item_type] += count
+
+            # Sort categories based on total count in descending order
+            categories = sorted(total_counts.keys(), key=lambda x: total_counts[x], reverse=True)
+
+            # Convert the set of status names to a sorted list
+            status_names = sorted(status_names_set)
+
+            # Build the series data using the dynamic list of status names
+            series = []
+            for status in status_names:
+                series_data = []
+                for category in categories:
+                    count = data[category].get(status, None)  # Get count or None
+                    if count not in [None, 0]:
+                        series_data.append(count)
+                    else:
+                        series_data.append(None)  # Use None for missing or zero values
+                if any(value is not None for value in series_data):  # Only add series if it has non-None data
+                    series.append({
+                        'name': status,
+                        'data': series_data
+                    })
+
+            # Structure the final JSON response
+            response = {
+                'categories': categories,
+                'series': series
+            }
+
+            return jsonify(response), 200
+
+    except Exception as e:
+        # Log the exception
+        print(f"Error in /api/item_type_performance_top_5_stacked_column_chart: {e}")
+        return jsonify({'error': 'An error occurred while fetching the item type performance data.'}), 500
 
 @app.route('/api/cumulative_performance_spline_line_chart', methods=['GET'])
 def get_cumulative_performance_spline_line_chart():

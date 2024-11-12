@@ -26,6 +26,7 @@
             font-family: Arial, sans-serif;
             height: 100vh; /* Fill the viewport height */
             overflow: hidden; /* Prevent body from scrolling */
+            background-color: #f0f0f0;
         }
         /* Header and Tab Navigation */
         header {
@@ -121,9 +122,9 @@
             min-height: 0;
         }
         .container {
-            background-color: white;
+            background-color: #fff;
             border-radius: 10px;
-            box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2);
+            box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.2);
             flex: 1;
             display: flex;
             flex-direction: column;
@@ -133,100 +134,116 @@
         .container.full {
             flex: 1;
         }
-        /* Grid Container inside the first row */
-        .grid-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            grid-template-rows: 1fr 1fr;
-            gap: 10px;
-            flex: 1;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2);
-            overflow: hidden;
-            min-height: 0;
-        }
-        .grid-container-item {
-            background-color: white;
-            border-radius: 10px;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            min-height: 0;
-            position: relative;
-        }
-        /* Card Title */
-        .card-title {
-            text-align: center;
-            font-size: 8px;
-            margin-top: 5px;
-        }
-
-        /* Card Number */
-        .card-number {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-        }
-
-        #card1 {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .card1-inner-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 5px;
-            width: 100%;
-            height: 100%; /* Ensure the parent container has a defined height */
-            margin-bottom: 10px ;
-        }
-        
-        .card1-inner-item {
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2);
-            padding: 10px;
-            height: 100%; /* Make the inner items fill the container vertically */
-        }
-
-        .card1-inner-item.right-content {
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            margin-right: 10px;
-        }
-
-        .split-container {
-            display: flex;
-            flex-direction: column;
-            flex: 1;
-        }
-
-        .split-item {
-            flex: 1;
-            /*border: 1px solid #ccc; /* Optional: for visual separation */
-        }
-
-        .left-content {
-            margin-left: 10px;
-            margin-right: 0px;
-        }
-
-        .right-content {
-            margin-right: 10px;
-        }
-
         /* Chart Container */
         .chart-container {
             flex: 1;
             min-height: 0;
             min-width: 0;
         }
+
+        /* KPI Cards Styles */
+        /* Container for all KPI cards */
+        .kpi-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-gap: 5px; /* Adjusted gap between cards */
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.2);
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* Individual KPI Card Styles */
+        .kpi-card {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.2);
+            background-color: #fff;
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .kpi-border {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 16px;
+            height: 100%;
+            background: linear-gradient(to bottom, green, rgba(0, 0, 0, 0));
+            transition: background 0.3s;
+        }
+
+        .kpi-content {
+            text-align: center;
+            padding-left: 16px;
+            padding-right: 16px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .kpi-title {
+            font-size: 22px;
+            margin: 0 0 8px 0;
+            color: #333;
+        }
+
+        .kpi-value {
+            font-size: 32px;
+            margin: 0;
+            color: #000;
+        }
+
+        .kpi-change {
+            font-size: 16px;
+            margin-top: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .kpi-change .change-percentage {
+            margin-right: 4px;
+        }
+
+        .kpi-change .comparison-text {
+            color: #555;
+            font-size: 14px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 800px) {
+            .kpi-container {
+                grid-template-columns: 1fr;
+                grid-gap: 10px;
+                box-shadow: none;
+            }
+
+            .kpi-card {
+                width: 100%;
+                height: 150px;
+            }
+
+            .kpi-border {
+                position: static;
+                width: 100%;
+                height: 16px;
+                background: linear-gradient(to right, green, rgba(0, 0, 0, 0));
+            }
+
+            .kpi-content {
+                padding: 12px;
+            }
+        }
+
         /* Dark Mode Styles */
         body.dark-mode {
             background-color: #121212;
@@ -237,8 +254,8 @@
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
         }
         body.dark-mode .container,
-        body.dark-mode .grid-container,
-        body.dark-mode .grid-container-item {
+        body.dark-mode .kpi-container,
+        body.dark-mode .kpi-card {
             background-color: #1e1e1e;
             color: #ffffff;
         }
@@ -254,10 +271,9 @@
         body.dark-mode .tablink:hover {
             background-color: #333333;
         }
-        body.dark-mode .card-title {
-            color: #ffffff;
-        }
-        body.dark-mode .card-number {
+        body.dark-mode .kpi-title,
+        body.dark-mode .kpi-value,
+        body.dark-mode .kpi-change .comparison-text {
             color: #ffffff;
         }
     </style>
@@ -267,7 +283,6 @@
         <div class="tab-navigation">
             <div class="tabs">
                 <button class="tablink active" onclick="openTab(event, 'tab1')">Overall Performance</button>
-                <!-- Removed 'Performance by Vendor' and 'Performance by PO' tabs -->
                 <button class="tablink" onclick="openTab(event, 'tab4')">Empty</button>
             </div>
             <label class="switch">
@@ -277,98 +292,67 @@
         </div>
     </header>
     <!-- Tab 1 Content -->
-<div id="tab1" class="tabcontent active">
-    <div class="row">
-        <!-- Top row with modified first container -->
-        <!-- Placed grid-container directly inside the row -->
-        <div class="grid-container">
-            <!-- Top rightmost container -->
-            <div class="grid-container-item" id="card1" style="box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2)">
-                <div class="card-title" style="box-shadow: none; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: bold;">Pending Information</div>
-                <div class="card1-inner-container">
-                    <div class="card1-inner-item left-content" style="background-color:rgb(211,211,211); box-shadow: none; display: flex; align-items: center; justify-content: center; font-size: 48px; -bottom: 10px;">153</div>
-                    <div class="card1-inner-item right-content" style="padding:0; box-shadow: none;">
-                        <div class="split-container" style="padding:0;">
-                            <div class="split-item" style="display: flex; align-items: center; box-shadow: none; justify-content: center; font-size: 16px; flex-direction: column; padding-top: 10px;">
-                                <span style="color: black; font-size: 16px;">
-                                    <span style="font-size: 30px; font-weight: bolder;">↑</span > <span style="font-size: 17px; font-weight: bold;">89(78%)</span>
-                                </span>
-                            </div>
-                            <div class="split-item" style="display: flex; align-items: center; box-shadow: none; justify-content: center; font-size: 14px; flex-direction: column; padding-bottom: 10px;">
-                                <span>vs.</span>
-                                <span>LAST WEEK</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Top left container -->
-            <div class="grid-container-item" id="card2" style="box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2)">
-                <div class="card-title" style="box-shadow: none; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: bold;">Under Vendor Review</div>
-                <div class="card1-inner-container">
-                    <div class="card1-inner-item left-content" style="background-color:rgb(44,175,254); box-shadow: none; display: flex; align-items: center; justify-content: center; font-size: 48px; -bottom: 10px;">53</div>
-                    <div class="card1-inner-item right-content" style="padding:0; box-shadow: none;">
-                        <div class="split-container" style="padding:0;">
-                            <div class="split-item" style="display: flex; align-items: center; box-shadow: none; justify-content: center; font-size: 16px; flex-direction: column; padding-top: 10px;">
-                                <span style="color: black; font-size: 16px;">
-                                    <span style="font-size: 30px; font-weight: bolder;">⇄</span > <span style="font-size: 17px; font-weight: bold;">0 (0%)</span>
-                                </span>
-                            </div>
-                            <div class="split-item" style="display: flex; align-items: center; box-shadow: none; justify-content: center; font-size: 14px; flex-direction: column; padding-bottom: 10px;">
-                                <span>vs.</span>
-                                <span>LAST WEEK</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Bottom right container -->
-            <div class="grid-container-item" id="card3" style="box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2)">
-                <div class="card-title" style="box-shadow: none; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: bold;">Under Customs Review</div>
-                <div class="card1-inner-container">
-                    <div class="card1-inner-item left-content" style="background-color:rgb(0,226,114); box-shadow: none; display: flex; align-items: center; justify-content: center; font-size: 48px; -bottom: 10px;">13</div>
-                    <div class="card1-inner-item right-content" style="padding:0; box-shadow: none;">
-                        <div class="split-container" style="padding:0;">
-                            <div class="split-item" style="display: flex; align-items: center; box-shadow: none; justify-content: center; font-size: 16px; flex-direction: column; padding-top: 10px;">
-                                <span style="color: green; font-size: 16px;">
-                                    <span style="font-size: 30px; font-weight: bolder;">↑</span > <span style="font-size: 17px; font-weight: bold;">35(23%)</span>
-                                </span>
-                            </div>
-                            <div class="split-item" style="display: flex; align-items: center; box-shadow: none; justify-content: center; font-size: 14px; flex-direction: column; padding-bottom: 10px;">
-                                <span>vs.</span>
-                                <span>LAST WEEK</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Bottom left container -->
-            <div class="grid-container-item" id="card4" style="box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2)">
-                <div class="card-title" style="box-shadow: none; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: bold;">Revision Required</div>
-                <div class="card1-inner-container">
-                    <div class="card1-inner-item left-content" style="background-color:red; box-shadow: none; display: flex; align-items: center; justify-content: center; font-size: 48px; -bottom: 10px;">23</div>
-                    <div class="card1-inner-item right-content" style="padding:0; box-shadow: none;">
-                        <div class="split-container" style="padding:0;">
-                            <div class="split-item" style="display: flex; align-items: center; box-shadow: none; justify-content: center; font-size: 16px; flex-direction: column; padding-top: 10px;">
-                                <span style="color: green; font-size: 16px;">
-                                    <span style="font-size: 30px; font-weight: bolder;">↓</span > <span style="font-size: 17px; font-weight: bold;">56(43%)</span>
-                                </span>
-                            </div>
-                            <div class="split-item" style="display: flex; align-items: center; box-shadow: none; justify-content: center; font-size: 14px; flex-direction: column; padding-bottom: 10px;">
-                                <span>vs.</span>
-                                <span>LAST WEEK</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div id="tab1" class="tabcontent active">
+        <div class="row">
+            <!-- Container for the KPI cards -->
             <div class="container">
-                <!-- Added id for the donut chart container -->
+                <div class="kpi-container">
+                    <!-- KPI Card 1 -->
+                    <div class="kpi-card">
+                        <div class="kpi-border"></div>
+                        <div class="kpi-content">
+                            <p class="kpi-title">Pending Information</p>
+                            <h1 class="kpi-value">153</h1>
+                            <div class="kpi-change">
+                                <span class="change-percentage" style="color: green;">▲ 15%</span>
+                                <span class="comparison-text">vs. week previous</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- KPI Card 2 -->
+                    <div class="kpi-card">
+                        <div class="kpi-border"></div>
+                        <div class="kpi-content">
+                            <p class="kpi-title">Under Vendor Review</p>
+                            <h1 class="kpi-value">53</h1>
+                            <div class="kpi-change">
+                                <span class="change-percentage" style="color: red;">▼ 5%</span>
+                                <span class="comparison-text">vs. week previous</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- KPI Card 3 -->
+                    <div class="kpi-card">
+                        <div class="kpi-border"></div>
+                        <div class="kpi-content">
+                            <p class="kpi-title">Under Customs Review </p>
+                            <h1 class="kpi-value">13</h1>
+                            <div class="kpi-change">
+                                <span class="change-percentage" style="color: green;">▲ 35%</span>
+                                <span class="comparison-text">vs. week previous</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- KPI Card 4 -->
+                    <div class="kpi-card">
+                        <div class="kpi-border"></div>
+                        <div class="kpi-content">
+                            <p class="kpi-title">Revision Required</p>
+                            <h1 class="kpi-value">23</h1>
+                            <div class="kpi-change">
+                                <span class="change-percentage" style="color: red;">▼ 43%</span>
+                                <span class="comparison-text">vs. week previous</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Container for the donut chart -->
+            <div class="container">
                 <div id="container-donut-chart" class="chart-container"></div>
-            </div>
-            <div class="container">
-                <!-- Empty container 3 -->
             </div>
         </div>
         <div class="row">
@@ -377,10 +361,10 @@
                 <div id="container1-chart" class="chart-container"></div>
             </div>
             <div class="container">
-                <div id="container2-chart" class="chart-container"></div>
+                <div id="container3-chart" class="chart-container"></div>
             </div>
             <div class="container">
-                <div id="container3-chart" class="chart-container"></div>
+                <div id="container2-chart" class="chart-container"></div>
             </div>
         </div>
         <div class="row">
@@ -415,7 +399,7 @@
             // Redraw charts when switching tabs
             if (tabName === 'tab1') {
                 drawCharts();
-                populateCardNumbers();
+                updateKpiCards(); // Update KPI cards
             }
         }
 
@@ -427,99 +411,349 @@
         // Function to draw all charts in Tab 1
         function drawCharts() {
             drawDonutChart();
-            drawApparelTypeStackedColumnChart('container1-chart'); // First instance
-            drawApparelTypeStackedColumnChart('container2-chart'); // Second instance (duplicate)
+            drawApparelTypeStackedColumnChart('container1-chart');
             drawApparelGroupStackedBarChart();
+            drawItemTypeStackedBarChart();
             drawCumulativePerformanceAreaChart();
         }
 
-        // Function to populate random numbers in the cards
-        function populateCardNumbers() {
-            document.getElementById('number-pending').textContent = Math.floor(Math.random() * 100);
-            document.getElementById('number-inprogress').textContent = Math.floor(Math.random() * 100);
-            document.getElementById('number-Under Customs Review').textContent = Math.floor(Math.random() * 100);
-            document.getElementById('number-Approved and Classified').textContent = Math.floor(Math.random() * 100);
-        }
-
-        // Function to draw the Highcharts Donut Chart with backend data
-        function drawDonutChart() {
-            fetch('http://localhost:5000/api/overall_performance_donut_chart')
+        // Function to update KPI cards
+        function updateKpiCards() {
+            fetch('http://localhost:5000/api/kpi_cards')
                 .then(response => response.json())
                 .then(data => {
-                    // Map data to add colors based on the status name
-                    const dataWithColors = data.data.map(dataItem => {
-                        let color;
-                        if (dataItem.name === 'Under Customs Review') color = "rgb(44,175,254)";
-                        else if (dataItem.name === 'Approved and Classified') color = "rgb(0,226,114)";
-                        //else if (dataItem.name === 'Revision Required') color = 'red';
-                        else if (dataItem.name === 'Pending Information') color = 'rgb(211,211,211)';
-                        else if (dataItem.name === 'Under Vendor Review') color = 'rgb(44,175,254)';
+                    // Map status names to gradient colors
+                    const gradientColors = {
+                        'Pending Information': 'rgb(211,211,211)',
+                        'Under Vendor Review': 'rgb(44,175,254)',
+                        'Under Customs Review': 'rgb(0,226,114)',
+                        'Revision Required': 'red'
+                    };
 
-                        return { ...dataItem, color };
-                    });
+                    // Select all KPI cards
+                    const kpiCards = document.querySelectorAll('.kpi-card');
 
-                    Highcharts.chart('container-donut-chart', { // Updated container id
-                        chart: {
-                            type: 'pie',
-                            backgroundColor: 'transparent'
-                        },
-                        title: {
-                            text: 'Overall Performance by Status',
-                            align: 'left',
-                            style: {
-                                fontSize: '15px'
-                            }
-                        },
-                        plotOptions: {
-                            pie: {
-                                innerSize: '30%', // Make it a donut chart
-                                dataLabels: {
-                                    enabled: true,
-                                    format: '{point.name}: </br> {point.percentage:.1f}%', // Format percentage to one decimal place
-                                    style: {
-                                        fontSize: '10px'
-                                    }
-                                }
-                            }
-                        },
-                        series: [{
-                            name: 'Categories',
-                            data: dataWithColors // Use data with specific colors
-                        }],
-                        credits: {
-                            enabled: false
-                        },
-                        exporting: {
-                            enabled: true
+                    // For each card, update with data
+                    kpiCards.forEach(card => {
+                        const kpiTitle = card.querySelector('.kpi-title').textContent.trim();
+                        const kpiValue = card.querySelector('.kpi-value');
+                        const kpiChangePercentage = card.querySelector('.change-percentage');
+                        const kpiComparisonText = card.querySelector('.comparison-text');
+                        const kpiBorder = card.querySelector('.kpi-border');
+
+                        // Find the data entry matching the title
+                        const matchingData = data.find(item => item.status_name === kpiTitle);
+
+                        if (matchingData) {
+                            // Update the KPI value
+                            kpiValue.textContent = matchingData.latest_count.toLocaleString();
+
+                            // Calculate the percentage change
+                            const percentageChange = matchingData.percentage_change;
+                            const isPositive = percentageChange >= 0;
+                            const sign = isPositive ? '▲' : '▼';
+                            const color = isPositive ? 'green' : 'red';
+                            const formattedChange = `${sign} ${Math.abs(percentageChange).toFixed(2)}%`;
+
+                            // Update the KPI change with color and sign
+                            kpiChangePercentage.textContent = formattedChange;
+                            kpiChangePercentage.style.color = color;
+
+                            // Update the comparison text
+                            kpiComparisonText.textContent = 'vs. week previous';
+
+                            // Update the border gradient color
+                            const gradientColor = gradientColors[matchingData.status_name] || 'grey';
+                            kpiBorder.style.background = `linear-gradient(to bottom, ${gradientColor}, rgba(0, 0, 0, 0))`;
+                        } else {
+                            // If no data is found, set default values
+                            kpiValue.textContent = 'N/A';
+                            kpiChangePercentage.textContent = 'N/A';
+                            kpiChangePercentage.style.color = 'grey';
+                            kpiComparisonText.textContent = '';
+                            kpiBorder.style.background = 'linear-gradient(to bottom, grey, rgba(0, 0, 0, 0))';
                         }
                     });
                 })
-                .catch(error => console.log("Error fetching Donut chart data:", error));
+                .catch(error => {
+                    console.error('Error fetching KPI cards data:', error);
+                });
         }
 
-        // Function to draw the Highcharts Stacked Column Chart with backend data
-        function drawApparelTypeStackedColumnChart(containerId) {
-            fetch('http://localhost:5000/api/apparel_performance_top_5_stacked_column__chart')
+
+    // Function to draw the Highcharts Donut Chart with backend data
+    function drawDonutChart() {
+        fetch('http://localhost:5000/api/overall_performance_donut_chart')
+            .then(response => response.json())
+            .then(data => {
+                // Map data to add colors based on the status name
+                const dataWithColors = data.data.map(dataItem => {
+                    let color;
+                    if (dataItem.name === 'Under Customs Review') color = 'rgb(0,226,114)';
+                    else if (dataItem.name === 'Approved and Classified') color = "rgb(0,226,114)";
+                    else if (dataItem.name === 'Pending Information') color = 'rgb(211,211,211)';
+                    else if (dataItem.name === 'Under Vendor Review') color = 'rgb(44,175,254)';
+                    else if (seriesItem.name === 'Revision Required') color = 'red';
+
+                    return { ...dataItem, color };
+                });
+
+                Highcharts.chart('container-donut-chart', { // Updated container id
+                    chart: {
+                        type: 'pie',
+                        backgroundColor: 'transparent'
+                    },
+                    title: {
+                        text: 'Overall Performance by Status (Last 24 hrs)',
+                        align: 'left',
+                        style: {
+                            fontSize: '15px'
+                        }
+                    },
+                    plotOptions: {
+                        pie: {
+                            innerSize: '30%', // Make it a donut chart
+                            dataLabels: {
+                                enabled: true,
+                                format: '{point.name}: </br> {point.percentage:.1f}%', // Format percentage to one decimal place
+                                style: {
+                                    fontSize: '15px'
+                                }
+                            }
+                        }
+                    },
+                    series: [{
+                        name: 'Categories',
+                        data: dataWithColors // Use data with specific colors
+                    }],
+                    credits: {
+                        enabled: false
+                    },
+                    exporting: {
+                        enabled: true
+                    }
+                });
+            })
+            .catch(error => console.log("Error fetching Donut chart data:", error));
+    }
+
+    // Function to draw the Highcharts Stacked Column Chart with backend data
+    function drawApparelTypeStackedColumnChart(containerId) {
+        fetch('http://localhost:5000/api/apparel_performance_top_5_stacked_column__chart')
+            .then(response => response.json())
+            .then(data => {
+                // Map series data to add colors based on the status name
+                const seriesWithColors = data.series.map(seriesItem => {
+                    let color;
+                    if (seriesItem.name === 'Under Customs Review') color = 'rgb(0,226,114)';
+                    else if (seriesItem.name === 'Approved and Classified') color = "rgb(0,226,114)";
+                    else if (seriesItem.name === 'Revision Required') color = 'red';
+                    else if (seriesItem.name === 'Pending Information') color = 'rgb(211,211,211)';
+
+                    return { ...seriesItem, color };
+                });
+                Highcharts.chart(containerId, {
+                    chart: {
+                        type: 'column',
+                        backgroundColor: 'transparent',
+                    },
+                    title: {
+                        text: 'Top 10 -  Apparel Type by Status (Last 24 hrs)',
+                        align: 'left',
+                        style: {
+                            fontSize: '15px'
+                        }
+                    },
+                    xAxis: {
+                        categories: data.categories, // Use categories from backend data
+                        title: {
+                            text: 'Apparel Type'
+                        },
+                        gridLineWidth: 1 // Show vertical grid lines
+                    },
+                    yAxis: {
+                        min: 0,
+                        title: { 
+                            text: 'Count' 
+                        },
+                        labels: {
+                            enabled: false // Hide Y-axis value labels
+                        },
+                        gridLineWidth: 0, // Hide horizontal grid lines
+                        stackLabels: {
+                            enabled: true,
+                            formatter: function () {
+                                return Highcharts.numberFormat(this.total, 0); // Display as plain text
+                            },
+                            style: {
+                                fontWeight: 'bold', // Remove bold style
+                                color: 'black' // Use default color
+                            }
+                        }
+                    },
+                    legend: {
+                        align: 'right',
+                        verticalAlign: 'top',
+                        y: 1,
+                        floating: false,
+                        backgroundColor: 'white',
+                        borderColor: '#CCC',
+                        borderWidth: 1,
+                        shadow: false,
+                        itemStyle: {
+                            fontSize: '10px'
+                        },
+                        borderColor: null,
+                        borderWidth: 0,
+                    },
+                    tooltip: {
+                        headerFormat: '<b>{point.x}</b><br/>',
+                        pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+                    },
+                    plotOptions: {
+                        column: {
+                            stacking: 'normal',
+                            dataLabels: {
+                                enabled: true
+                            }
+                        }
+                    },
+                    series: seriesWithColors, // Use series with specific colors
+                    credits: {
+                        enabled: false
+                    },
+                    exporting: {
+                        enabled: true
+                    }
+                });
+            })
+            .catch(error => console.log("Error fetching stacked column chart data:", error));
+    }
+
+    // Function to draw the Highcharts Stacked Horizontal Bar Chart with backend data
+    function drawApparelGroupStackedBarChart() {
+        fetch('http://localhost:5000/api/apparel_group_performance_top_5_horizontal_stacked_bar_chart')
+            .then(response => response.json())
+            .then(data => {
+                // Map series data to add colors based on the status name
+                const seriesWithColors = data.series.map(seriesItem => {
+                    let color;
+                    if (seriesItem.name === 'Under Customs Review') color = 'rgb(0,226,114)';
+                    else if (seriesItem.name === 'Approved and Classified') color = "rgb(0,226,114)";
+                    else if (seriesItem.name === 'Revision Required') color = 'red';
+
+                    return { ...seriesItem, color };
+                });
+                Highcharts.chart('container3-chart', {
+                    chart: {
+                        type: 'bar',
+                        backgroundColor: 'transparent'
+                    },
+                    title: {
+                        text: 'Top 10 -  Apparel Group by Status (Last 24 hrs)',
+                        align: 'left',
+                        style: {
+                            fontSize: '15px'
+                        }
+                    },
+                    xAxis: {
+                        categories: data.categories, // Use categories from backend data
+                        gridLineWidth: 1, // Show vertical grid lines
+                        title: {
+                            text: 'Apparel Group'
+                        },
+                        labels: {
+                            formatter: function () {
+                                return this.value.toUpperCase(); // Convert each label to uppercase
+                            },
+                            style: {
+                                fontWeight: 'normal', // Adjust styling as needed
+                                color: 'black' // Use default color
+                            }
+                        }
+                    },
+                    yAxis: {
+                        min: 0,
+                        gridLineWidth: 0, // Hide horizontal grid lines
+                        title: {
+                            text: 'Count'
+                        },
+                        labels: {
+                            enabled: false // Hide tick value labels
+                        },
+                        stackLabels: {
+                            enabled: true,
+                            formatter: function () {
+                                return Highcharts.numberFormat(this.total, 0); // Display as plain text
+                            },
+                            style: {
+                                fontWeight: 'bold', // Remove bold style
+                                color: 'black' // Use default color
+                            }
+                        }
+                    },
+                    legend: {
+                        align: 'right',
+                        verticalAlign: 'top',
+                        y: 1,
+                        floating: false,
+                        backgroundColor: 'white',
+                        borderColor: '#CCC',
+                        borderWidth: 1,
+                        shadow: false,
+                        itemStyle: {
+                            fontSize: '10px'
+                        },
+                        borderColor: null,
+                        borderWidth: 0,
+                    },
+                    tooltip: {
+                        headerFormat: '<b>{point.x}</b><br/>',
+                        pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+                    },
+                    plotOptions: {
+                        bar: {
+                            stacking: 'normal',
+                            dataLabels: {
+                                enabled: true
+                            }
+                        }
+                    },
+                    series: seriesWithColors, // Use series with specific colors
+                    credits: {
+                        enabled: false
+                    },
+                    exporting: {
+                        enabled: true
+                    }
+                });
+            })
+            .catch(error => console.log("Error fetching stacked bar chart data:", error));
+    }
+
+    // Function to draw the Highcharts Stacked Bar Chart for Item Type
+    function drawItemTypeStackedBarChart() {
+            fetch('http://localhost:5000/api/item_type_performance_top_5_stacked_column_chart')
                 .then(response => response.json())
                 .then(data => {
                     // Map series data to add colors based on the status name
                     const seriesWithColors = data.series.map(seriesItem => {
                         let color;
-                        if (dataItem.name === 'Under Customs Review') color = "rgb(44,175,254)";
-                        else if (dataItem.name === 'Approved and Classified') color = "rgb(0,226,114)";
-                        //else if (dataItem.name === 'Revision Required') color = 'red';
-                        else if (dataItem.name === 'Pending Information') color = 'rgb(211,211,211)';
-                        else if (dataItem.name === 'Under Vendor Review') color = 'rgb(44,175,254)';
+                        if (seriesItem.name === 'Under Customs Review') color = 'rgb(0,226,114)';
+                        else if (seriesItem.name === 'Approved and Classified') color = "rgb(0,226,114)";
+                        else if (seriesItem.name === 'Revision Required') color = 'red';
+                        else if (seriesItem.name === 'Pending Information') color = 'rgb(211,211,211)';
+                        else if (seriesItem.name === 'Under Vendor Review') color = 'rgb(44,175,254)';
 
                         return { ...seriesItem, color };
                     });
-                    Highcharts.chart(containerId, {
+                    Highcharts.chart('container2-chart', {
                         chart: {
-                            type: 'column',
-                            backgroundColor: 'transparent',
+                            type: 'bar', // Changed chart type to 'bar' for horizontal bars
+                            backgroundColor: 'transparent'
                         },
                         title: {
-                            text: 'Performance by Apparel Type (Top 5) by Status',
+                            text: 'Top 10 -  Performance by Item Type by Status (Last 24 hrs)',
                             align: 'left',
                             style: {
                                 fontSize: '15px'
@@ -528,7 +762,16 @@
                         xAxis: {
                             categories: data.categories, // Use categories from backend data
                             title: {
-                                text: 'Apparel Type'
+                                text: 'Item Type'
+                            },
+                            labels: {
+                                formatter: function () {
+                                    return this.value.toUpperCase(); // Convert each label to uppercase
+                                },
+                                style: {
+                                    fontWeight: 'normal',
+                                    color: 'black'
+                                }
                             },
                             gridLineWidth: 1 // Show vertical grid lines
                         },
@@ -547,8 +790,8 @@
                                     return Highcharts.numberFormat(this.total, 0); // Display as plain text
                                 },
                                 style: {
-                                    fontWeight: 'bold', // Remove bold style
-                                    color: 'black' // Use default color
+                                    fontWeight: 'bold',
+                                    color: 'black'
                                 }
                             }
                         },
@@ -558,9 +801,6 @@
                             y: 1,
                             floating: false,
                             backgroundColor: 'white',
-                            borderColor: '#CCC',
-                            borderWidth: 1,
-                            shadow: false,
                             itemStyle: {
                                 fontSize: '10px'
                             },
@@ -572,7 +812,7 @@
                             pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
                         },
                         plotOptions: {
-                            column: {
+                            bar: { // Changed to 'bar' to match the chart type
                                 stacking: 'normal',
                                 dataLabels: {
                                     enabled: true
@@ -588,222 +828,120 @@
                         }
                     });
                 })
-                .catch(error => console.log("Error fetching stacked column chart data:", error));
+                .catch(error => console.log("Error fetching item type stacked bar chart data:", error));
         }
 
-        // Function to draw the Highcharts Stacked Horizontal Bar Chart with backend data
-        function drawApparelGroupStackedBarChart() {
-            fetch('http://localhost:5000/api/apparel_group_performance_top_5_horizontal_stacked_bar_chart')
-                .then(response => response.json())
-                .then(data => {
-                    // Map series data to add colors based on the status name
-                    const seriesWithColors = data.series.map(seriesItem => {
-                        let color;
-                        if (dataItem.name === 'Under Customs Review') color = "rgb(44,175,254)";
-                        else if (dataItem.name === 'Approved and Classified') color = "rgb(0,226,114)";
-                        //else if (dataItem.name === 'Revision Required') color = 'red';
-                        else if (dataItem.name === 'Pending Information') color = 'rgb(211,211,211)';
-                        else if (dataItem.name === 'Under Vendor Review') color = 'rgb(44,175,254)';
 
-                        return { ...dataItem, color };
-                    });
-                    Highcharts.chart('container3-chart', {
-                        chart: {
-                            type: 'bar',
-                            backgroundColor: 'transparent'
-                        },
+    // Function to draw the Highcharts Stacked Area Chart with backend data
+    function drawCumulativePerformanceAreaChart() {
+        fetch('http://localhost:5000/api/cumulative_performance_spline_line_chart')
+            .then(response => response.json())
+            .then(data => {
+                // Map series data to add colors based on the status name
+                const seriesWithColors = data.series.map(seriesItem => {
+                    let color;
+                    if (seriesItem.name === 'Under Customs Review') color = 'rgb(0,226,114)';
+                    else if (seriesItem.name === 'Approved and Classified') color = "rgb(0,226,114)";
+                    else if (seriesItem.name === 'Revision Required') color = 'red';
+                    else if (seriesItem.name === 'Pending Information') color = 'rgb(211,211,211)';
+
+                    return { ...seriesItem, color };
+                });
+                Highcharts.chart('container4-chart', {
+                    chart: {
+                        type: 'area',
+                        backgroundColor: 'transparent'
+                    },
+                    title: {
+                        text: 'Cumulative Performance to Date by Status (Last 7 Days)',
+                        align: 'left',
+                        style: {
+                            fontSize: '15px'
+                        }
+                    },
+                    xAxis: {
+                        categories: data.categories, // Use categories (dates) from backend data
+                        gridLineWidth: 1, // Show vertical grid lines
                         title: {
-                            text: 'Performance by Apparel Group (Top 5) by Status',
-                            align: 'left',
-                            style: {
-                                fontSize: '15px'
-                            }
+                            text: 'Day'
                         },
-                        xAxis: {
-                            categories: data.categories, // Use categories from backend data
-                            gridLineWidth: 1, // Show vertical grid lines
-                            title: {
-                                text: 'Apparel Group'
-                            },
-                            labels: {
-                                formatter: function () {
-                                    return this.value.toUpperCase(); // Convert each label to uppercase
-                                },
-                                style: {
-                                    fontWeight: 'normal', // Adjust styling as needed
-                                    color: 'black' // Use default color
-                                }
-                            }
+                        labels: {
+                            rotation: 0,
+                            align: 'right'
+                        }
+                    },
+                    yAxis: {
+                        min: 0,
+                        gridLineWidth: 0, // Hide horizontal grid lines 
+                        title: {
+                            text: 'Count'
                         },
-                        yAxis: {
-                            min: 0,
-                            gridLineWidth: 0, // Hide horizontal grid lines
-                            title: {
-                                text: 'Count'
+                        labels: {
+                            enabled: false // Hide Y-axis value labels
+                        },
+                    },
+                    legend: {
+                        align: 'right',
+                        verticalAlign: 'top',
+                        y: 1,
+                        floating: false,
+                        backgroundColor: 'white',
+                        borderColor: '#CCC',
+                        borderWidth: 1,
+                        shadow: false,
+                        itemStyle: {
+                            fontSize: '10px'
+                        },
+                        borderColor: null,
+                        borderWidth: 0,
+                    },
+                    tooltip: {
+                        shared: true,
+                        crosshairs: true,
+                        headerFormat: '<b>{point.key}</b><br/>',
+                    },
+                    plotOptions: {
+                        area: {
+                            stacking: 'normal',
+                            marker: {
+                                enabled: true
                             },
-                            labels: {
-                                enabled: false // Hide tick value labels
-                            },
-                            stackLabels: {
+                            dataLabels: {
                                 enabled: true,
                                 formatter: function () {
-                                    return Highcharts.numberFormat(this.total, 0); // Display as plain text
+                                    return this.y > 0 ? this.y : null;
                                 },
                                 style: {
-                                    fontWeight: 'bold', // Remove bold style
-                                    color: 'black' // Use default color
+                                    textOutline: 'none',
+                                    fontWeight: 'normal'
                                 }
                             }
-                        },
-                        legend: {
-                            align: 'right',
-                            verticalAlign: 'top',
-                            y: 1,
-                            floating: false,
-                            backgroundColor: 'white',
-                            borderColor: '#CCC',
-                            borderWidth: 1,
-                            shadow: false,
-                            itemStyle: {
-                                fontSize: '10px'
-                            },
-                            borderColor: null,
-                            borderWidth: 0,
-                        },
-                        tooltip: {
-                            headerFormat: '<b>{point.x}</b><br/>',
-                            pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
-                        },
-                        plotOptions: {
-                            bar: {
-                                stacking: 'normal',
-                                dataLabels: {
-                                    enabled: true
-                                }
-                            }
-                        },
-                        series: seriesWithColors, // Use series with specific colors
-                        credits: {
-                            enabled: false
-                        },
-                        exporting: {
-                            enabled: true
                         }
-                    });
-                })
-                .catch(error => console.log("Error fetching stacked bar chart data:", error));
-        }
+                    },
+                    series: seriesWithColors, // Use series with specific colors
+                    credits: {
+                        enabled: false
+                    },
+                    exporting: {
+                        enabled: true
+                    }
+                });
+            })
+            .catch(error => console.log("Error fetching area chart data:", error));
+    }
 
-        // Function to draw the Highcharts Stacked Area Chart with backend data
-        function drawCumulativePerformanceAreaChart() {
-            fetch('http://localhost:5000/api/cumulative_performance_spline_line_chart')
-                .then(response => response.json())
-                .then(data => {
-                    // Map series data to add colors based on the status name
-                    const seriesWithColors = data.series.map(seriesItem => {
-                        let color;
-                        if (dataItem.name === 'Under Customs Review') color = "rgb(44,175,254)";
-                        else if (dataItem.name === 'Approved and Classified') color = "rgb(0,226,114)";
-                        //else if (dataItem.name === 'Revision Required') color = 'red';
-                        else if (dataItem.name === 'Pending Information') color = 'rgb(211,211,211)';
-                        else if (dataItem.name === 'Under Vendor Review') color = 'rgb(44,175,254)';
+    // Draw charts on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        drawCharts();
+        updateKpiCards();
+    });
 
-                        return { ...dataItem, color };
-                    });
-                    Highcharts.chart('container4-chart', {
-                        chart: {
-                            type: 'area',
-                            backgroundColor: 'transparent'
-                        },
-                        title: {
-                            text: 'Cumulative Performance to Date (Last 7 Days) by Status',
-                            align: 'left',
-                            style: {
-                                fontSize: '15px'
-                            }
-                        },
-                        xAxis: {
-                            categories: data.categories, // Use categories (dates) from backend data
-                            gridLineWidth: 1, // Show vertical grid lines
-                            title: {
-                                text: 'Day'
-                            },
-                            labels: {
-                                rotation: 0,
-                                align: 'right'
-                            }
-                        },
-                        yAxis: {
-                            min: 0,
-                            gridLineWidth: 0, // Hide horizontal grid lines 
-                            title: {
-                                text: 'Count'
-                            },
-                            labels: {
-                                enabled: false // Hide Y-axis value labels
-                            },
-                        },
-                        legend: {
-                            align: 'right',
-                            verticalAlign: 'top',
-                            y: 1,
-                            floating: false,
-                            backgroundColor: 'white',
-                            borderColor: '#CCC',
-                            borderWidth: 1,
-                            shadow: false,
-                            itemStyle: {
-                                fontSize: '10px'
-                            },
-                            borderColor: null,
-                            borderWidth: 0,
-                        },
-                        tooltip: {
-                            shared: true,
-                            crosshairs: true,
-                            headerFormat: '<b>{point.key}</b><br/>',
-                        },
-                        plotOptions: {
-                            area: {
-                                stacking: 'normal',
-                                marker: {
-                                    enabled: true
-                                },
-                                dataLabels: {
-                                    enabled: true,
-                                    formatter: function () {
-                                        return this.y > 0 ? this.y : null;
-                                    },
-                                    style: {
-                                        textOutline: 'none',
-                                        fontWeight: 'normal'
-                                    }
-                                }
-                            }
-                        },
-                        series: seriesWithColors, // Use series with specific colors
-                        credits: {
-                            enabled: false
-                        },
-                        exporting: {
-                            enabled: true
-                        }
-                    });
-                })
-                .catch(error => console.log("Error fetching area chart data:", error));
-        }
-
-        // Draw charts on page load
-        document.addEventListener('DOMContentLoaded', function() {
+    // Redraw charts on window resize
+    window.addEventListener('resize', function() {
+        if (document.getElementById('tab1').classList.contains('active')) {
             drawCharts();
-        });
-
-        // Redraw charts on window resize
-        window.addEventListener('resize', function() {
-            if (document.getElementById('tab1').classList.contains('active')) {
-                drawCharts();
-            }
-        });
-    </script>
+        }
+    });
+</script>
 </body>
 </html>
