@@ -11,8 +11,8 @@
     <!-- Highcharts Modules (Optional, if needed for other charts) -->
     <script src="https://code.highcharts.com/modules/series-label.js"></script>
     <style>
-        /* CSS Reset */
-        * {
+       /* CSS Reset */
+       * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
@@ -62,7 +62,7 @@
         .tablink:hover {
             background-color: #e0e0e0;
         }
-        /* Dark Mode Toggle Switch - Dark mode doesn't work as it should right now*/
+        /* Dark Mode Toggle Switch */
         .switch {
             position: relative;
             display: inline-block;
@@ -140,18 +140,28 @@
             min-height: 0;
             min-width: 0;
         }
-
         /* KPI Cards Styles */
         .kpi-container {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            grid-gap: 5px;
+            display: flex;
+            flex-direction: column;
             padding: 10px;
             background-color: #fff;
             border-radius: 8px;
             box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.2);
             flex: 1;
             overflow: hidden;
+        }
+        .kpi-overview-title {
+            font-size: 15px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .kpi-cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-gap: 5px;
+            flex: 1;
         }
         .kpi-card {
             display: flex;
@@ -185,7 +195,7 @@
         }
         .kpi-title {
             font-size: 22px;
-            margin: 0 0 8px 0;
+            margin-bottom: 8px;
             color: #333;
         }
         .kpi-value {
@@ -209,13 +219,11 @@
         }
         /* Responsive Design */
         @media (max-width: 800px) {
-            .kpi-container {
+            .kpi-cards {
                 grid-template-columns: 1fr;
                 grid-gap: 10px;
-                box-shadow: none;
             }
             .kpi-card {
-                width: 100%;
                 height: 150px;
             }
             .kpi-border {
@@ -246,18 +254,17 @@
         body.dark-mode .tablink {
             background-color: #1e1e1e;
             color: #ffffff;
-            border-radius: 5px;
         }
         body.dark-mode .tablink.active {
             background-color: #3a3aff;
-            color: #ffffff;
         }
         body.dark-mode .tablink:hover {
             background-color: #333333;
         }
         body.dark-mode .kpi-title,
         body.dark-mode .kpi-value,
-        body.dark-mode .kpi-change .comparison-text {
+        body.dark-mode .kpi-change .comparison-text,
+        body.dark-mode .kpi-overview-title {
             color: #ffffff;
         }
     </style>
@@ -281,51 +288,51 @@
             <!-- Container for the KPI cards -->
             <div class="container">
                 <div class="kpi-container">
-                    <!-- KPI Card 1 -->
-                    <div class="kpi-card">
-                        <div class="kpi-border"></div>
-                        <div class="kpi-content">
-                            <p class="kpi-title">Pending Information</p>
-                            <h1 class="kpi-value">153</h1>
-                            <div class="kpi-change">
-                                <span class="change-percentage" style="color: green;">▲ 15%</span>
-                                <span class="comparison-text">vs. week previous</span>
+                    <p class="kpi-overview-title">KPI Overview (Last 24 hrs)</p>
+                    <div class="kpi-cards">
+                        <!-- KPI Cards -->
+                        <div class="kpi-card">
+                            <div class="kpi-border"></div>
+                            <div class="kpi-content">
+                                <p class="kpi-title">Pending Information</p>
+                                <h1 class="kpi-value">0</h1>
+                                <div class="kpi-change">
+                                    <span class="change-percentage" style="color: grey;">N/A</span>
+                                    <span class="comparison-text"></span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <!-- KPI Card 2 -->
-                    <div class="kpi-card">
-                        <div class="kpi-border"></div>
-                        <div class="kpi-content">
-                            <p class="kpi-title">Under Vendor Review</p>
-                            <h1 class="kpi-value">53</h1>
-                            <div class="kpi-change">
-                                <span class="change-percentage" style="color: red;">▼ 5%</span>
-                                <span class="comparison-text">vs. week previous</span>
+                        <div class="kpi-card">
+                            <div class="kpi-border"></div>
+                            <div class="kpi-content">
+                                <p class="kpi-title">Under Vendor Review</p>
+                                <h1 class="kpi-value">0</h1>
+                                <div class="kpi-change">
+                                    <span class="change-percentage" style="color: grey;">N/A</span>
+                                    <span class="comparison-text"></span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <!-- KPI Card 3 -->
-                    <div class="kpi-card">
-                        <div class="kpi-border"></div>
-                        <div class="kpi-content">
-                            <p class="kpi-title">Under Customs Review</p>
-                            <h1 class="kpi-value">13</h1>
-                            <div class="kpi-change">
-                                <span class="change-percentage" style="color: green;">▲ 35%</span>
-                                <span class="comparison-text">vs. week previous</span>
+                        <div class="kpi-card">
+                            <div class="kpi-border"></div>
+                            <div class="kpi-content">
+                                <p class="kpi-title">Under Customs Review</p>
+                                <h1 class="kpi-value">0</h1>
+                                <div class="kpi-change">
+                                    <span class="change-percentage" style="color: grey;">N/A</span>
+                                    <span class="comparison-text"></span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <!-- KPI Card 4 -->
-                    <div class="kpi-card">
-                        <div class="kpi-border"></div>
-                        <div class="kpi-content">
-                            <p class="kpi-title">Revision Required</p>
-                            <h1 class="kpi-value">23</h1>
-                            <div class="kpi-change">
-                                <span class="change-percentage" style="color: red;">▼ 43%</span>
-                                <span class="comparison-text">vs. week previous</span>
+                        <div class="kpi-card">
+                            <div class="kpi-border"></div>
+                            <div class="kpi-content">
+                                <p class="kpi-title">Revision Required</p>
+                                <h1 class="kpi-value">0</h1>
+                                <div class="kpi-change">
+                                    <span class="change-percentage" style="color: grey;">N/A</span>
+                                    <span class="comparison-text"></span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -536,7 +543,7 @@
                             backgroundColor: 'transparent',
                         },
                         title: {
-                            text: 'Top 10 -  Apparel Type by Status (Last 24 hrs)',
+                            text: 'Top 10 -  Item Type Group by Status (Last 24 hrs)',
                             align: 'left',
                             style: {
                                 fontSize: '15px'
@@ -545,7 +552,17 @@
                         xAxis: {
                             categories: data.categories,
                             title: {
-                                text: 'Apparel Type'
+                                text: 'Item Type Group',
+                                fontSize: '11px'
+                            },
+                            labels: {
+                                formatter: function () {
+                                    return this.value.toUpperCase();
+                                },
+                                style: {
+                                    color: 'black',
+                                    fontSize: '11px'
+                                }
                             },
                             gridLineWidth: 1
                         },
@@ -605,6 +622,7 @@
         }
 
         // Function to draw the Highcharts Stacked Horizontal Bar Chart with backend data
+        // 'Apparel Group' has been renamed to 'Item Attribute' for consistency with the rest of the app
         function drawApparelGroupStackedBarChart() {
             fetch('http://localhost:5000/api/apparel_group_performance_top_10_horizontal_stacked_bar_chart')
                 .then(response => response.json())
@@ -616,7 +634,7 @@
                             backgroundColor: 'transparent'
                         },
                         title: {
-                            text: 'Top 10 -  Apparel Group by Status (Last 24 hrs)',
+                            text: 'Top 10 -  Item Attribute by Status (Last 24 hrs)',
                             align: 'left',
                             style: {
                                 fontSize: '15px'
@@ -626,14 +644,15 @@
                             categories: data.categories,
                             gridLineWidth: 1,
                             title: {
-                                text: 'Apparel Group'
+                                text: 'Item Attribute'
                             },
                             labels: {
                                 formatter: function () {
                                     return this.value.toUpperCase();
                                 },
                                 style: {
-                                    color: 'black'
+                                    color: 'black',
+                                    fontSize: '11px'
                                 }
                             }
                         },
@@ -720,7 +739,8 @@
                                     return this.value.toUpperCase();
                                 },
                                 style: {
-                                    color: 'black'
+                                    color: 'black',
+                                    fontSize: '11px'
                                 }
                             },
                             gridLineWidth: 1
