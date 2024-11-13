@@ -186,7 +186,7 @@ ORDER BY
 """
 
 # SQL Query for the Stacked Column Chart (Performance by Item Type)
-STACKED_COLUMN_CHART_QUERY_PERFORMANCE_BY_ITEM_TYPE_TOP_10 = """
+STACKED_HORIZONTAL_BAR_CHART_QUERY_PERFORMANCE_BY_ITEM_TYPE_TOP_10 = """
 WITH ApparelGroupCounts AS (
     SELECT 
         lit.ItemType AS ItemType_Name,
@@ -269,7 +269,7 @@ def get_kpi_cards():
         return jsonify({'error': 'An error occurred while fetching the KPI cards data.'}), 500
 
 # SQL Query for the Cumulative Performance (Spline Line Chart)
-CUMULATIVE_PERFORMANCE_QUERY_SPLINE_LINE_CHART = """
+CUMULATIVE_PERFORMANCE_STACKED_AREA_CHART = """
 SELECT 
     COALESCE(CAST(p.DateSubmitted AS DATE), CAST(p.CreatedAt AS DATE)) AS Date_For_Status,
     ps.Description AS Status_Name,
@@ -340,8 +340,8 @@ def get_overall_performance_donut_chart():
         return jsonify({'error': 'An error occurred while fetching the donut chart data.'}), 500
 
 
-@app.route('/api/apparel_performance_top_5_stacked_column__chart', methods=['GET'])
-def get_apparel_performance_top_5_stacked_column__chart():
+@app.route('/api/apparel_performance_top_10_stacked_column__chart', methods=['GET'])
+def get_apparel_performance_top_10_stacked_column__chart():
     try:
         # Establish connection to SQL Server
         with pyodbc.connect(ODBC_CONNECTION_STRING) as conn:
@@ -394,11 +394,11 @@ def get_apparel_performance_top_5_stacked_column__chart():
 
     except Exception as e:
         # Log the exception (you can enhance this for better logging)
-        print(f"Error in /api/apparel_performance_top_5_stacked_column__chart: {e}")
+        print(f"Error in /api/apparel_performance_top_10_stacked_column__chart: {e}")
         return jsonify({'error': 'An error occurred while fetching the apparel performance data.'}), 500
 
-@app.route('/api/apparel_group_performance_top_5_horizontal_stacked_bar_chart', methods=['GET'])
-def get_apparel_group_performance_top_5_horizontal_stacked_bar_chart():
+@app.route('/api/apparel_group_performance_top_10_horizontal_stacked_bar_chart', methods=['GET'])
+def get_apparel_group_performance_top_10_horizontal_stacked_bar_chart():
     try:
         # Establish connection to SQL Server
         with pyodbc.connect(ODBC_CONNECTION_STRING) as conn:
@@ -455,16 +455,16 @@ def get_apparel_group_performance_top_5_horizontal_stacked_bar_chart():
             return jsonify(response), 200
 
     except Exception as e:
-        print(f"Error in /api/apparel_group_performance_top_5_horizontal_stacked_bar_chart: {e}")
+        print(f"Error in /api/apparel_group_performance_top_10_horizontal_stacked_bar_chart: {e}")
         return jsonify({'error': 'An error occurred while fetching the apparel group performance data.'}), 500
 
-@app.route('/api/item_type_performance_top_5_stacked_column_chart', methods=['GET'])
-def get_item_type_performance_top_5_stacked_column_chart():
+@app.route('/api/item_type_performance_top_10_horizontal_stacked_bar_chart', methods=['GET'])
+def get_item_type_performance_top_10_stacked_horizontal_bar_chart():
     try:
         # Establish connection to SQL Server
         with pyodbc.connect(ODBC_CONNECTION_STRING) as conn:
             cursor = conn.cursor()
-            cursor.execute(STACKED_COLUMN_CHART_QUERY_PERFORMANCE_BY_ITEM_TYPE_TOP_10)
+            cursor.execute(STACKED_HORIZONTAL_BAR_CHART_QUERY_PERFORMANCE_BY_ITEM_TYPE_TOP_10)
             rows = cursor.fetchall()
 
             # Process the fetched data for the stacked bar chart
@@ -517,15 +517,15 @@ def get_item_type_performance_top_5_stacked_column_chart():
 
     except Exception as e:
         # Log the exception
-        print(f"Error in /api/item_type_performance_top_5_stacked_column_chart: {e}")
+        print(f"Error in /api/item_type_performance_top_10_horizontal_stacked_bar_chart: {e}")
         return jsonify({'error': 'An error occurred while fetching the item type performance data.'}), 500
 
-@app.route('/api/cumulative_performance_spline_line_chart', methods=['GET'])
-def get_cumulative_performance_spline_line_chart():
+@app.route('/api/cumulative_performance_stacked_area_chart', methods=['GET'])
+def get_cumulative_performance_stacked_area_chart():
     try:
         with pyodbc.connect(ODBC_CONNECTION_STRING) as conn:
             cursor = conn.cursor()
-            cursor.execute(CUMULATIVE_PERFORMANCE_QUERY_SPLINE_LINE_CHART)
+            cursor.execute(CUMULATIVE_PERFORMANCE_STACKED_AREA_CHART)
             rows = cursor.fetchall()
 
             # Organize data by date and status
@@ -562,7 +562,7 @@ def get_cumulative_performance_spline_line_chart():
             return jsonify(response), 200
 
     except Exception as e:
-        print(f"Error in /api/cumulative_performance_spline_line_chart: {e}")
+        print(f"Error in /api/cumulative_performance_stacked_area_chart: {e}")
         return jsonify({'error': 'An error occurred while fetching the cumulative performance data.'}), 500
 
 

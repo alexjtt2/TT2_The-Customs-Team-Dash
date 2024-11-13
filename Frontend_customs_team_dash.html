@@ -526,7 +526,7 @@
 
         // Function to draw the Highcharts Stacked Column Chart with backend data
         function drawApparelTypeStackedColumnChart(containerId) {
-            fetch('http://localhost:5000/api/apparel_performance_top_5_stacked_column__chart')
+            fetch('http://localhost:5000/api/apparel_performance_top_10_stacked_column__chart')
                 .then(response => response.json())
                 .then(data => {
                     const seriesWithColors = applyStatusColorsToSeries(data.series);
@@ -606,7 +606,7 @@
 
         // Function to draw the Highcharts Stacked Horizontal Bar Chart with backend data
         function drawApparelGroupStackedBarChart() {
-            fetch('http://localhost:5000/api/apparel_group_performance_top_5_horizontal_stacked_bar_chart')
+            fetch('http://localhost:5000/api/apparel_group_performance_top_10_horizontal_stacked_bar_chart')
                 .then(response => response.json())
                 .then(data => {
                     const seriesWithColors = applyStatusColorsToSeries(data.series);
@@ -694,7 +694,7 @@
 
         // Function to draw the Highcharts Stacked Bar Chart for Item Type
         function drawItemTypeStackedBarChart() {
-            fetch('http://localhost:5000/api/item_type_performance_top_5_stacked_column_chart')
+            fetch('http://localhost:5000/api/item_type_performance_top_10_horizontal_stacked_bar_chart')
                 .then(response => response.json())
                 .then(data => {
                     const seriesWithColors = applyStatusColorsToSeries(data.series);
@@ -782,7 +782,7 @@
 
         // Function to draw the Highcharts Stacked Area Chart with backend data
         function drawCumulativePerformanceAreaChart() {
-            fetch('http://localhost:5000/api/cumulative_performance_spline_line_chart')
+            fetch('http://localhost:5000/api/cumulative_performance_stacked_area_chart')
                 .then(response => response.json())
                 .then(data => {
                     const seriesWithColors = applyStatusColorsToSeries(data.series);
