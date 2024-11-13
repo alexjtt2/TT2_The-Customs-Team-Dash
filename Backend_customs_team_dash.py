@@ -339,7 +339,6 @@ def get_overall_performance_donut_chart():
         print(f"Error in /api/overall_performance_donut_chart: {e}")
         return jsonify({'error': 'An error occurred while fetching the donut chart data.'}), 500
 
-
 @app.route('/api/apparel_performance_top_10_stacked_column__chart', methods=['GET'])
 def get_apparel_performance_top_10_stacked_column__chart():
     try:
@@ -564,7 +563,6 @@ def get_cumulative_performance_stacked_area_chart():
     except Exception as e:
         print(f"Error in /api/cumulative_performance_stacked_area_chart: {e}")
         return jsonify({'error': 'An error occurred while fetching the cumulative performance data.'}), 500
-
 
 
 if __name__ == '__main__':
