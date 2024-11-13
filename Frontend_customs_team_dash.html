@@ -24,8 +24,8 @@
             display: flex;
             flex-direction: column;
             font-family: Arial, sans-serif;
-            height: 100vh; /* Fill the viewport height */
-            overflow: hidden; /* Prevent body from scrolling */
+            height: 100vh;
+            overflow: hidden;
             background-color: #f0f0f0;
         }
         /* Header and Tab Navigation */
@@ -62,7 +62,7 @@
         .tablink:hover {
             background-color: #e0e0e0;
         }
-        /* Dark Mode Toggle Switch */
+        /* Dark Mode Toggle Switch - Dark mode doesn't work as it should right now*/
         .switch {
             position: relative;
             display: inline-block;
@@ -142,11 +142,10 @@
         }
 
         /* KPI Cards Styles */
-        /* Container for all KPI cards */
         .kpi-container {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            grid-gap: 5px; /* Adjusted gap between cards */
+            grid-gap: 5px;
             padding: 10px;
             background-color: #fff;
             border-radius: 8px;
@@ -154,8 +153,6 @@
             flex: 1;
             overflow: hidden;
         }
-
-        /* Individual KPI Card Styles */
         .kpi-card {
             display: flex;
             align-items: center;
@@ -168,7 +165,6 @@
             width: 100%;
             height: 100%;
         }
-
         .kpi-border {
             position: absolute;
             left: 0;
@@ -178,30 +174,25 @@
             background: linear-gradient(to bottom, green, rgba(0, 0, 0, 0));
             transition: background 0.3s;
         }
-
         .kpi-content {
             text-align: center;
-            padding-left: 16px;
-            padding-right: 16px;
+            padding: 0 16px;
             flex: 1;
             display: flex;
             flex-direction: column;
             justify-content: center;
             overflow: hidden;
         }
-
         .kpi-title {
             font-size: 22px;
             margin: 0 0 8px 0;
             color: #333;
         }
-
         .kpi-value {
             font-size: 32px;
             margin: 0;
             color: #000;
         }
-
         .kpi-change {
             font-size: 16px;
             margin-top: 4px;
@@ -209,16 +200,13 @@
             align-items: center;
             justify-content: center;
         }
-
         .kpi-change .change-percentage {
             margin-right: 4px;
         }
-
         .kpi-change .comparison-text {
             color: #555;
             font-size: 14px;
         }
-
         /* Responsive Design */
         @media (max-width: 800px) {
             .kpi-container {
@@ -226,24 +214,20 @@
                 grid-gap: 10px;
                 box-shadow: none;
             }
-
             .kpi-card {
                 width: 100%;
                 height: 150px;
             }
-
             .kpi-border {
                 position: static;
                 width: 100%;
                 height: 16px;
                 background: linear-gradient(to right, green, rgba(0, 0, 0, 0));
             }
-
             .kpi-content {
                 padding: 12px;
             }
         }
-
         /* Dark Mode Styles */
         body.dark-mode {
             background-color: #121212;
@@ -309,7 +293,6 @@
                             </div>
                         </div>
                     </div>
-
                     <!-- KPI Card 2 -->
                     <div class="kpi-card">
                         <div class="kpi-border"></div>
@@ -322,12 +305,11 @@
                             </div>
                         </div>
                     </div>
-
                     <!-- KPI Card 3 -->
                     <div class="kpi-card">
                         <div class="kpi-border"></div>
                         <div class="kpi-content">
-                            <p class="kpi-title">Under Customs Review </p>
+                            <p class="kpi-title">Under Customs Review</p>
                             <h1 class="kpi-value">13</h1>
                             <div class="kpi-change">
                                 <span class="change-percentage" style="color: green;">▲ 35%</span>
@@ -335,7 +317,6 @@
                             </div>
                         </div>
                     </div>
-
                     <!-- KPI Card 4 -->
                     <div class="kpi-card">
                         <div class="kpi-border"></div>
@@ -379,6 +360,15 @@
         <div class="container full">Empty Content</div>
     </div>
     <script>
+        // Status Colors Mapping
+        const statusColors = {
+            'Pending Information': 'rgb(211,211,211)',
+            'Under Vendor Review': 'rgb(44,175,254)',
+            'Under Customs Review': 'rgb(0,226,114)',
+            'Approved and Classified': 'rgb(0,226,114)',
+            'Revision Required': 'red'
+        };
+
         function openTab(evt, tabName) {
             var i, tabcontent, tablinks;
             // Hide all tabcontent
@@ -417,19 +407,27 @@
             drawCumulativePerformanceAreaChart();
         }
 
+        // Function to apply status colors to series
+        function applyStatusColorsToSeries(series) {
+            return series.map(seriesItem => {
+                const color = statusColors[seriesItem.name] || seriesItem.color;
+                return { ...seriesItem, color };
+            });
+        }
+
+        // Function to apply status colors to data
+        function applyStatusColorsToData(data) {
+            return data.map(dataItem => {
+                const color = statusColors[dataItem.name] || dataItem.color;
+                return { ...dataItem, color };
+            });
+        }
+
         // Function to update KPI cards
         function updateKpiCards() {
             fetch('http://localhost:5000/api/kpi_cards')
                 .then(response => response.json())
                 .then(data => {
-                    // Map status names to gradient colors
-                    const gradientColors = {
-                        'Pending Information': 'rgb(211,211,211)',
-                        'Under Vendor Review': 'rgb(44,175,254)',
-                        'Under Customs Review': 'rgb(0,226,114)',
-                        'Revision Required': 'red'
-                    };
-
                     // Select all KPI cards
                     const kpiCards = document.querySelectorAll('.kpi-card');
 
@@ -463,7 +461,7 @@
                             kpiComparisonText.textContent = 'vs. week previous';
 
                             // Update the border gradient color
-                            const gradientColor = gradientColors[matchingData.status_name] || 'grey';
+                            const gradientColor = statusColors[matchingData.status_name] || 'grey';
                             kpiBorder.style.background = `linear-gradient(to bottom, ${gradientColor}, rgba(0, 0, 0, 0))`;
                         } else {
                             // If no data is found, set default values
@@ -480,300 +478,76 @@
                 });
         }
 
-
-    // Function to draw the Highcharts Donut Chart with backend data
-    function drawDonutChart() {
-        fetch('http://localhost:5000/api/overall_performance_donut_chart')
-            .then(response => response.json())
-            .then(data => {
-                // Map data to add colors based on the status name
-                const dataWithColors = data.data.map(dataItem => {
-                    let color;
-                    if (dataItem.name === 'Under Customs Review') color = 'rgb(0,226,114)';
-                    else if (dataItem.name === 'Approved and Classified') color = "rgb(0,226,114)";
-                    else if (dataItem.name === 'Pending Information') color = 'rgb(211,211,211)';
-                    else if (dataItem.name === 'Under Vendor Review') color = 'rgb(44,175,254)';
-                    else if (seriesItem.name === 'Revision Required') color = 'red';
-
-                    return { ...dataItem, color };
-                });
-
-                Highcharts.chart('container-donut-chart', { // Updated container id
-                    chart: {
-                        type: 'pie',
-                        backgroundColor: 'transparent'
-                    },
-                    title: {
-                        text: 'Overall Performance by Status (Last 24 hrs)',
-                        align: 'left',
-                        style: {
-                            fontSize: '15px'
-                        }
-                    },
-                    plotOptions: {
-                        pie: {
-                            innerSize: '30%', // Make it a donut chart
-                            dataLabels: {
-                                enabled: true,
-                                format: '{point.name}: </br> {point.percentage:.1f}%', // Format percentage to one decimal place
-                                style: {
-                                    fontSize: '15px'
-                                }
-                            }
-                        }
-                    },
-                    series: [{
-                        name: 'Categories',
-                        data: dataWithColors // Use data with specific colors
-                    }],
-                    credits: {
-                        enabled: false
-                    },
-                    exporting: {
-                        enabled: true
-                    }
-                });
-            })
-            .catch(error => console.log("Error fetching Donut chart data:", error));
-    }
-
-    // Function to draw the Highcharts Stacked Column Chart with backend data
-    function drawApparelTypeStackedColumnChart(containerId) {
-        fetch('http://localhost:5000/api/apparel_performance_top_5_stacked_column__chart')
-            .then(response => response.json())
-            .then(data => {
-                // Map series data to add colors based on the status name
-                const seriesWithColors = data.series.map(seriesItem => {
-                    let color;
-                    if (seriesItem.name === 'Under Customs Review') color = 'rgb(0,226,114)';
-                    else if (seriesItem.name === 'Approved and Classified') color = "rgb(0,226,114)";
-                    else if (seriesItem.name === 'Revision Required') color = 'red';
-                    else if (seriesItem.name === 'Pending Information') color = 'rgb(211,211,211)';
-
-                    return { ...seriesItem, color };
-                });
-                Highcharts.chart(containerId, {
-                    chart: {
-                        type: 'column',
-                        backgroundColor: 'transparent',
-                    },
-                    title: {
-                        text: 'Top 10 -  Apparel Type by Status (Last 24 hrs)',
-                        align: 'left',
-                        style: {
-                            fontSize: '15px'
-                        }
-                    },
-                    xAxis: {
-                        categories: data.categories, // Use categories from backend data
-                        title: {
-                            text: 'Apparel Type'
-                        },
-                        gridLineWidth: 1 // Show vertical grid lines
-                    },
-                    yAxis: {
-                        min: 0,
-                        title: { 
-                            text: 'Count' 
-                        },
-                        labels: {
-                            enabled: false // Hide Y-axis value labels
-                        },
-                        gridLineWidth: 0, // Hide horizontal grid lines
-                        stackLabels: {
-                            enabled: true,
-                            formatter: function () {
-                                return Highcharts.numberFormat(this.total, 0); // Display as plain text
-                            },
-                            style: {
-                                fontWeight: 'bold', // Remove bold style
-                                color: 'black' // Use default color
-                            }
-                        }
-                    },
-                    legend: {
-                        align: 'right',
-                        verticalAlign: 'top',
-                        y: 1,
-                        floating: false,
-                        backgroundColor: 'white',
-                        borderColor: '#CCC',
-                        borderWidth: 1,
-                        shadow: false,
-                        itemStyle: {
-                            fontSize: '10px'
-                        },
-                        borderColor: null,
-                        borderWidth: 0,
-                    },
-                    tooltip: {
-                        headerFormat: '<b>{point.x}</b><br/>',
-                        pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
-                    },
-                    plotOptions: {
-                        column: {
-                            stacking: 'normal',
-                            dataLabels: {
-                                enabled: true
-                            }
-                        }
-                    },
-                    series: seriesWithColors, // Use series with specific colors
-                    credits: {
-                        enabled: false
-                    },
-                    exporting: {
-                        enabled: true
-                    }
-                });
-            })
-            .catch(error => console.log("Error fetching stacked column chart data:", error));
-    }
-
-    // Function to draw the Highcharts Stacked Horizontal Bar Chart with backend data
-    function drawApparelGroupStackedBarChart() {
-        fetch('http://localhost:5000/api/apparel_group_performance_top_5_horizontal_stacked_bar_chart')
-            .then(response => response.json())
-            .then(data => {
-                // Map series data to add colors based on the status name
-                const seriesWithColors = data.series.map(seriesItem => {
-                    let color;
-                    if (seriesItem.name === 'Under Customs Review') color = 'rgb(0,226,114)';
-                    else if (seriesItem.name === 'Approved and Classified') color = "rgb(0,226,114)";
-                    else if (seriesItem.name === 'Revision Required') color = 'red';
-
-                    return { ...seriesItem, color };
-                });
-                Highcharts.chart('container3-chart', {
-                    chart: {
-                        type: 'bar',
-                        backgroundColor: 'transparent'
-                    },
-                    title: {
-                        text: 'Top 10 -  Apparel Group by Status (Last 24 hrs)',
-                        align: 'left',
-                        style: {
-                            fontSize: '15px'
-                        }
-                    },
-                    xAxis: {
-                        categories: data.categories, // Use categories from backend data
-                        gridLineWidth: 1, // Show vertical grid lines
-                        title: {
-                            text: 'Apparel Group'
-                        },
-                        labels: {
-                            formatter: function () {
-                                return this.value.toUpperCase(); // Convert each label to uppercase
-                            },
-                            style: {
-                                fontWeight: 'normal', // Adjust styling as needed
-                                color: 'black' // Use default color
-                            }
-                        }
-                    },
-                    yAxis: {
-                        min: 0,
-                        gridLineWidth: 0, // Hide horizontal grid lines
-                        title: {
-                            text: 'Count'
-                        },
-                        labels: {
-                            enabled: false // Hide tick value labels
-                        },
-                        stackLabels: {
-                            enabled: true,
-                            formatter: function () {
-                                return Highcharts.numberFormat(this.total, 0); // Display as plain text
-                            },
-                            style: {
-                                fontWeight: 'bold', // Remove bold style
-                                color: 'black' // Use default color
-                            }
-                        }
-                    },
-                    legend: {
-                        align: 'right',
-                        verticalAlign: 'top',
-                        y: 1,
-                        floating: false,
-                        backgroundColor: 'white',
-                        borderColor: '#CCC',
-                        borderWidth: 1,
-                        shadow: false,
-                        itemStyle: {
-                            fontSize: '10px'
-                        },
-                        borderColor: null,
-                        borderWidth: 0,
-                    },
-                    tooltip: {
-                        headerFormat: '<b>{point.x}</b><br/>',
-                        pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
-                    },
-                    plotOptions: {
-                        bar: {
-                            stacking: 'normal',
-                            dataLabels: {
-                                enabled: true
-                            }
-                        }
-                    },
-                    series: seriesWithColors, // Use series with specific colors
-                    credits: {
-                        enabled: false
-                    },
-                    exporting: {
-                        enabled: true
-                    }
-                });
-            })
-            .catch(error => console.log("Error fetching stacked bar chart data:", error));
-    }
-
-    // Function to draw the Highcharts Stacked Bar Chart for Item Type
-    function drawItemTypeStackedBarChart() {
-            fetch('http://localhost:5000/api/item_type_performance_top_5_stacked_column_chart')
+        // Function to draw the Highcharts Donut Chart with backend data
+        function drawDonutChart() {
+            fetch('http://localhost:5000/api/overall_performance_donut_chart')
                 .then(response => response.json())
                 .then(data => {
-                    // Map series data to add colors based on the status name
-                    const seriesWithColors = data.series.map(seriesItem => {
-                        let color;
-                        if (seriesItem.name === 'Under Customs Review') color = 'rgb(0,226,114)';
-                        else if (seriesItem.name === 'Approved and Classified') color = "rgb(0,226,114)";
-                        else if (seriesItem.name === 'Revision Required') color = 'red';
-                        else if (seriesItem.name === 'Pending Information') color = 'rgb(211,211,211)';
-                        else if (seriesItem.name === 'Under Vendor Review') color = 'rgb(44,175,254)';
+                    const dataWithColors = applyStatusColorsToData(data.data);
 
-                        return { ...seriesItem, color };
-                    });
-                    Highcharts.chart('container2-chart', {
+                    Highcharts.chart('container-donut-chart', {
                         chart: {
-                            type: 'bar', // Changed chart type to 'bar' for horizontal bars
+                            type: 'pie',
                             backgroundColor: 'transparent'
                         },
                         title: {
-                            text: 'Top 10 -  Performance by Item Type by Status (Last 24 hrs)',
+                            text: 'Overall Performance by Status (Last 24 hrs)',
+                            align: 'left',
+                            style: {
+                                fontSize: '15px'
+                            }
+                        },
+                        plotOptions: {
+                            pie: {
+                                innerSize: '30%',
+                                dataLabels: {
+                                    enabled: true,
+                                    format: '{point.name}: </br> {point.percentage:.1f}%',
+                                    style: {
+                                        fontSize: '15px'
+                                    }
+                                }
+                            }
+                        },
+                        series: [{
+                            name: 'Categories',
+                            data: dataWithColors
+                        }],
+                        credits: {
+                            enabled: false
+                        },
+                        exporting: {
+                            enabled: true
+                        }
+                    });
+                })
+                .catch(error => console.log("Error fetching Donut chart data:", error));
+        }
+
+        // Function to draw the Highcharts Stacked Column Chart with backend data
+        function drawApparelTypeStackedColumnChart(containerId) {
+            fetch('http://localhost:5000/api/apparel_performance_top_5_stacked_column__chart')
+                .then(response => response.json())
+                .then(data => {
+                    const seriesWithColors = applyStatusColorsToSeries(data.series);
+                    Highcharts.chart(containerId, {
+                        chart: {
+                            type: 'column',
+                            backgroundColor: 'transparent',
+                        },
+                        title: {
+                            text: 'Top 10 -  Apparel Type by Status (Last 24 hrs)',
                             align: 'left',
                             style: {
                                 fontSize: '15px'
                             }
                         },
                         xAxis: {
-                            categories: data.categories, // Use categories from backend data
+                            categories: data.categories,
                             title: {
-                                text: 'Item Type'
+                                text: 'Apparel Type'
                             },
-                            labels: {
-                                formatter: function () {
-                                    return this.value.toUpperCase(); // Convert each label to uppercase
-                                },
-                                style: {
-                                    fontWeight: 'normal',
-                                    color: 'black'
-                                }
-                            },
-                            gridLineWidth: 1 // Show vertical grid lines
+                            gridLineWidth: 1
                         },
                         yAxis: {
                             min: 0,
@@ -781,16 +555,15 @@
                                 text: 'Count' 
                             },
                             labels: {
-                                enabled: false // Hide Y-axis value labels
+                                enabled: false
                             },
-                            gridLineWidth: 0, // Hide horizontal grid lines
+                            gridLineWidth: 0,
                             stackLabels: {
                                 enabled: true,
                                 formatter: function () {
-                                    return Highcharts.numberFormat(this.total, 0); // Display as plain text
+                                    return Highcharts.numberFormat(this.total, 0);
                                 },
                                 style: {
-                                    fontWeight: 'bold',
                                     color: 'black'
                                 }
                             }
@@ -812,14 +585,190 @@
                             pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
                         },
                         plotOptions: {
-                            bar: { // Changed to 'bar' to match the chart type
+                            column: {
                                 stacking: 'normal',
                                 dataLabels: {
                                     enabled: true
                                 }
                             }
                         },
-                        series: seriesWithColors, // Use series with specific colors
+                        series: seriesWithColors,
+                        credits: {
+                            enabled: false
+                        },
+                        exporting: {
+                            enabled: true
+                        }
+                    });
+                })
+                .catch(error => console.log("Error fetching stacked column chart data:", error));
+        }
+
+        // Function to draw the Highcharts Stacked Horizontal Bar Chart with backend data
+        function drawApparelGroupStackedBarChart() {
+            fetch('http://localhost:5000/api/apparel_group_performance_top_5_horizontal_stacked_bar_chart')
+                .then(response => response.json())
+                .then(data => {
+                    const seriesWithColors = applyStatusColorsToSeries(data.series);
+                    Highcharts.chart('container3-chart', {
+                        chart: {
+                            type: 'bar',
+                            backgroundColor: 'transparent'
+                        },
+                        title: {
+                            text: 'Top 10 -  Apparel Group by Status (Last 24 hrs)',
+                            align: 'left',
+                            style: {
+                                fontSize: '15px'
+                            }
+                        },
+                        xAxis: {
+                            categories: data.categories,
+                            gridLineWidth: 1,
+                            title: {
+                                text: 'Apparel Group'
+                            },
+                            labels: {
+                                formatter: function () {
+                                    return this.value.toUpperCase();
+                                },
+                                style: {
+                                    color: 'black'
+                                }
+                            }
+                        },
+                        yAxis: {
+                            min: 0,
+                            gridLineWidth: 0,
+                            title: {
+                                text: 'Count'
+                            },
+                            labels: {
+                                enabled: false
+                            },
+                            stackLabels: {
+                                enabled: true,
+                                formatter: function () {
+                                    return Highcharts.numberFormat(this.total, 0);
+                                },
+                                style: {
+                                    color: 'black'
+                                }
+                            }
+                        },
+                        legend: {
+                            align: 'right',
+                            verticalAlign: 'top',
+                            y: 1,
+                            floating: false,
+                            backgroundColor: 'white',
+                            itemStyle: {
+                                fontSize: '10px'
+                            },
+                            borderColor: null,
+                            borderWidth: 0,
+                        },
+                        tooltip: {
+                            headerFormat: '<b>{point.x}</b><br/>',
+                            pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+                        },
+                        plotOptions: {
+                            bar: {
+                                stacking: 'normal',
+                                dataLabels: {
+                                    enabled: true
+                                }
+                            }
+                        },
+                        series: seriesWithColors,
+                        credits: {
+                            enabled: false
+                        },
+                        exporting: {
+                            enabled: true
+                        }
+                    });
+                })
+                .catch(error => console.log("Error fetching stacked bar chart data:", error));
+        }
+
+        // Function to draw the Highcharts Stacked Bar Chart for Item Type
+        function drawItemTypeStackedBarChart() {
+            fetch('http://localhost:5000/api/item_type_performance_top_5_stacked_column_chart')
+                .then(response => response.json())
+                .then(data => {
+                    const seriesWithColors = applyStatusColorsToSeries(data.series);
+                    Highcharts.chart('container2-chart', {
+                        chart: {
+                            type: 'bar',
+                            backgroundColor: 'transparent'
+                        },
+                        title: {
+                            text: 'Top 10 -  Performance by Item Type by Status (Last 24 hrs)',
+                            align: 'left',
+                            style: {
+                                fontSize: '15px'
+                            }
+                        },
+                        xAxis: {
+                            categories: data.categories,
+                            title: {
+                                text: 'Item Type'
+                            },
+                            labels: {
+                                formatter: function () {
+                                    return this.value.toUpperCase();
+                                },
+                                style: {
+                                    color: 'black'
+                                }
+                            },
+                            gridLineWidth: 1
+                        },
+                        yAxis: {
+                            min: 0,
+                            title: { 
+                                text: 'Count' 
+                            },
+                            labels: {
+                                enabled: false
+                            },
+                            gridLineWidth: 0,
+                            stackLabels: {
+                                enabled: true,
+                                formatter: function () {
+                                    return Highcharts.numberFormat(this.total, 0);
+                                },
+                                style: {
+                                    color: 'black'
+                                }
+                            }
+                        },
+                        legend: {
+                            align: 'right',
+                            verticalAlign: 'top',
+                            y: 1,
+                            floating: false,
+                            backgroundColor: 'white',
+                            itemStyle: {
+                                fontSize: '10px'
+                            },
+                            borderColor: null,
+                            borderWidth: 0,
+                        },
+                        tooltip: {
+                            headerFormat: '<b>{point.x}</b><br/>',
+                            pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+                        },
+                        plotOptions: {
+                            bar: {
+                                stacking: 'normal',
+                                dataLabels: {
+                                    enabled: true
+                                }
+                            }
+                        },
+                        series: seriesWithColors,
                         credits: {
                             enabled: false
                         },
@@ -831,117 +780,104 @@
                 .catch(error => console.log("Error fetching item type stacked bar chart data:", error));
         }
 
-
-    // Function to draw the Highcharts Stacked Area Chart with backend data
-    function drawCumulativePerformanceAreaChart() {
-        fetch('http://localhost:5000/api/cumulative_performance_spline_line_chart')
-            .then(response => response.json())
-            .then(data => {
-                // Map series data to add colors based on the status name
-                const seriesWithColors = data.series.map(seriesItem => {
-                    let color;
-                    if (seriesItem.name === 'Under Customs Review') color = 'rgb(0,226,114)';
-                    else if (seriesItem.name === 'Approved and Classified') color = "rgb(0,226,114)";
-                    else if (seriesItem.name === 'Revision Required') color = 'red';
-                    else if (seriesItem.name === 'Pending Information') color = 'rgb(211,211,211)';
-
-                    return { ...seriesItem, color };
-                });
-                Highcharts.chart('container4-chart', {
-                    chart: {
-                        type: 'area',
-                        backgroundColor: 'transparent'
-                    },
-                    title: {
-                        text: 'Cumulative Performance to Date by Status (Last 7 Days)',
-                        align: 'left',
-                        style: {
-                            fontSize: '15px'
-                        }
-                    },
-                    xAxis: {
-                        categories: data.categories, // Use categories (dates) from backend data
-                        gridLineWidth: 1, // Show vertical grid lines
+        // Function to draw the Highcharts Stacked Area Chart with backend data
+        function drawCumulativePerformanceAreaChart() {
+            fetch('http://localhost:5000/api/cumulative_performance_spline_line_chart')
+                .then(response => response.json())
+                .then(data => {
+                    const seriesWithColors = applyStatusColorsToSeries(data.series);
+                    Highcharts.chart('container4-chart', {
+                        chart: {
+                            type: 'area',
+                            backgroundColor: 'transparent'
+                        },
                         title: {
-                            text: 'Day'
+                            text: 'Cumulative Performance to Date by Status (Last 7 Days)',
+                            align: 'left',
+                            style: {
+                                fontSize: '15px'
+                            }
                         },
-                        labels: {
-                            rotation: 0,
-                            align: 'right'
-                        }
-                    },
-                    yAxis: {
-                        min: 0,
-                        gridLineWidth: 0, // Hide horizontal grid lines 
-                        title: {
-                            text: 'Count'
-                        },
-                        labels: {
-                            enabled: false // Hide Y-axis value labels
-                        },
-                    },
-                    legend: {
-                        align: 'right',
-                        verticalAlign: 'top',
-                        y: 1,
-                        floating: false,
-                        backgroundColor: 'white',
-                        borderColor: '#CCC',
-                        borderWidth: 1,
-                        shadow: false,
-                        itemStyle: {
-                            fontSize: '10px'
-                        },
-                        borderColor: null,
-                        borderWidth: 0,
-                    },
-                    tooltip: {
-                        shared: true,
-                        crosshairs: true,
-                        headerFormat: '<b>{point.key}</b><br/>',
-                    },
-                    plotOptions: {
-                        area: {
-                            stacking: 'normal',
-                            marker: {
-                                enabled: true
+                        xAxis: {
+                            categories: data.categories,
+                            gridLineWidth: 1,
+                            title: {
+                                text: 'Day'
                             },
-                            dataLabels: {
-                                enabled: true,
-                                formatter: function () {
-                                    return this.y > 0 ? this.y : null;
+                            labels: {
+                                rotation: 0,
+                                align: 'right'
+                            }
+                        },
+                        yAxis: {
+                            min: 0,
+                            gridLineWidth: 0,
+                            title: {
+                                text: 'Count'
+                            },
+                            labels: {
+                                enabled: false
+                            },
+                        },
+                        legend: {
+                            align: 'right',
+                            verticalAlign: 'top',
+                            y: 1,
+                            floating: false,
+                            backgroundColor: 'white',
+                            itemStyle: {
+                                fontSize: '10px'
+                            },
+                            borderColor: null,
+                            borderWidth: 0,
+                        },
+                        tooltip: {
+                            shared: true,
+                            crosshairs: true,
+                            headerFormat: '<b>{point.key}</b><br/>',
+                        },
+                        plotOptions: {
+                            area: {
+                                stacking: 'normal',
+                                marker: {
+                                    enabled: true
                                 },
-                                style: {
-                                    textOutline: 'none',
-                                    fontWeight: 'normal'
+                                dataLabels: {
+                                    enabled: true,
+                                    formatter: function () {
+                                        return this.y > 0 ? this.y : null;
+                                    },
+                                    style: {
+                                        textOutline: 'none',
+                                        fontWeight: 'normal'
+                                    }
                                 }
                             }
+                        },
+                        series: seriesWithColors,
+                        credits: {
+                            enabled: false
+                        },
+                        exporting: {
+                            enabled: true
                         }
-                    },
-                    series: seriesWithColors, // Use series with specific colors
-                    credits: {
-                        enabled: false
-                    },
-                    exporting: {
-                        enabled: true
-                    }
-                });
-            })
-            .catch(error => console.log("Error fetching area chart data:", error));
-    }
-
-    // Draw charts on page load
-    document.addEventListener('DOMContentLoaded', function() {
-        drawCharts();
-        updateKpiCards();
-    });
-
-    // Redraw charts on window resize
-    window.addEventListener('resize', function() {
-        if (document.getElementById('tab1').classList.contains('active')) {
-            drawCharts();
+                    });
+                })
+                .catch(error => console.log("Error fetching area chart data:", error));
         }
-    });
-</script>
+
+        // Draw charts on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            drawCharts();
+            updateKpiCards();
+        });
+
+        // Redraw charts on window resize
+        window.addEventListener('resize', function() {
+            if (document.getElementById('tab1').classList.contains('active')) {
+                drawCharts();
+            }
+        });
+    </script>
 </body>
 </html>
