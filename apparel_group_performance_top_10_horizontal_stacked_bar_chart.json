@@ -1,0 +1,43 @@
+{
+    "categories": [
+      "Bed Linen",
+      "Cushions & Covers",
+      "Slippers",
+      "T-Shirts",
+      "Trousers",
+      "Pullovers",
+      "Shoes",
+      "Shorts",
+      "Swimwear"
+    ],
+    "series": [
+      {
+        "data": [
+          null,
+          null,
+          null,
+          1,
+          null,
+          1,
+          1,
+          null,
+          2
+        ],
+        "name": "Under Customs Review"
+      },
+      {
+        "data": [
+          5,
+          5,
+          4,
+          3,
+          3,
+          1,
+          1,
+          2,
+          null
+        ],
+        "name": "Under Vendor Review"
+      }
+    ]
+  }
