@@ -1,0 +1,25 @@
+{
+    "categories": [
+      "Vendor_ABC"
+    ],
+    "series": [
+      {
+        "data": [
+          4
+        ],
+        "name": "Approved and Classified"
+      },
+      {
+        "data": [
+          1
+        ],
+        "name": "Revision Required"
+      },
+      {
+        "data": [
+          2
+        ],
+        "name": "Under Customs Review"
+      }
+    ]
+  }

@@ -21,9 +21,9 @@
       "status_name": "Under Customs Review"
     },
     {
-      "count_change": 10,
-      "earliest_count": 21,
-      "latest_count": 31,
+      "count_change": 12,
+      "earliest_count": 14,
+      "latest_count": 2,
       "percentage_change": 47.62,
       "status_name": "Under Vendor Review"
     }

@@ -1,0 +1,41 @@
+{
+    "categories": [
+      "FIXINGS & FASTENERS",
+      "OTHER CATEGORY #1",
+      "OTHER CATEGORY #2"
+    ],
+    "series": [
+      {
+        "data": [
+          4,
+          1,
+          2
+        ],
+        "name": "Approved and Classified"
+      },
+      {
+        "data": [
+          1,
+          1,
+          2
+        ],
+        "name": "Revision Required"
+      },
+      {
+        "data": [
+          2,
+          1,
+          2
+        ],
+        "name": "Under Customs Review"
+      },
+      {
+        "data": [
+          0,
+          5,
+          6
+        ],
+        "name": "Pending Information"
+      }
+    ]
+  }
