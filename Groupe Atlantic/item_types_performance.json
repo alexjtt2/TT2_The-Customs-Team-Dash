@@ -1,0 +1,48 @@
+{
+  "categories": [
+    "LOCK OR SPRING WASHERS",
+    "SELF-LOCKING NUTS (HI-LOK)",
+    "SELF TAPPING SCREWS",
+    "BOILER",
+    "ELECTRONIC",
+    "CABLE CLIPS"
+  ],
+  "series": [
+  {
+    "color": "rgb(1,226,114)",
+    "data": [
+    4,  
+    6,  
+    1,
+    15, 
+    7,
+    1
+    ],
+    "name": "Approved and Classified"
+  },
+  {
+    "color": "red",
+    "data": [
+    3,
+    5,
+    4,
+    12,
+    9,
+    7
+    ],
+    "name": "Revision Required"
+  },
+  {
+    "color": "rgb(44,175,254)",
+    "data": [
+    1,
+    1,
+    1,
+    12,
+    13,
+    4
+    ],
+    "name": "Under Customs Review"
+  }
+  ]
+}
