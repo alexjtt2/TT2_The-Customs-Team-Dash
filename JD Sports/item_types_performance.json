@@ -1,0 +1,40 @@
+{
+  "categories": [
+      "Sports Trainer",
+      "Parka",
+      "Backpack",
+      "Sweatshirt"
+  ],
+  "series": [
+  {
+    "color": "rgb(1,226,114)",
+    "data": [
+    4,  
+    6,  
+    1,
+    15
+    ],
+    "name": "Approved and Classified"
+  },
+  {
+    "color": "red",
+    "data": [
+    3,
+    5,
+    4,
+    12
+    ],
+    "name": "Revision Required"
+  },
+  {
+    "color": "rgb(44,175,254)",
+    "data": [
+    1,
+    1,
+    1,
+    12
+    ],
+    "name": "Under Customs Review"
+  }
+  ]
+}

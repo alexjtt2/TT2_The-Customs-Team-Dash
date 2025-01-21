@@ -1,0 +1,38 @@
+{
+    "categories": [
+      "Sports Trainer",
+      "Parka",
+      "Backpack",
+      "Sweatshirt"
+    ],
+    "series": [
+      {
+        "data": [
+          16,
+          1,
+          20,
+          6
+        ],
+        "name": "Approved and Classified"
+      },
+      {
+        "data": [
+          12,
+          4,
+          3,
+          14
+        ],
+        "name": "Revision Required"
+      },
+      {
+        "data": [
+          7,
+          7,
+          null,
+          null,
+          4
+        ],
+        "name": "Under Customs Review"
+      }
+    ]
+  }

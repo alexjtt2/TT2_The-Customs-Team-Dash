@@ -1,23 +1,23 @@
 {
     "categories": [
-      "FIXINGS & FASTENERS",
-      "OTHER CATEGORY #1",
-      "OTHER CATEGORY #2"
+      "Footwear",
+      "Garment",
+      "Bags & Cases"
     ],
     "series": [
       {
         "data": [
-          4,
-          1,
-          2
+          19,
+          16,
+          10
         ],
         "name": "Approved and Classified"
       },
       {
         "data": [
-          1,
-          1,
-          2
+          0,
+          10,
+          6
         ],
         "name": "Revision Required"
       },

@@ -280,7 +280,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(mess
 def get_kpi_cards():
     try:
         # Define the JSON file path (use relative path)
-        json_path = 'Groupe Atlantic\\kpi_cards.json'
+        json_path = 'JD Sports\\kpi_cards.json'
         
         # Check if the JSON file exists
         if not os.path.exists(json_path):
@@ -418,7 +418,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(mess
 def get_overall_performance_donut_chart():
     try:
         # Define the JSON file path (use relative path)
-        json_path = 'Groupe atlantic\\overall_performance_donut_chart.json'
+        json_path = 'JD Sports\\overall_performance_donut_chart.json'
         
         # Check if the JSON file exists
         if not os.path.exists(json_path):
@@ -528,7 +528,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(mess
 def get_apparel_performance_top_10_stacked_column__chart():
     try:
         # Define the JSON file path (use relative path)
-        json_path = 'Groupe Atlantic\\item_type_group.json'
+        json_path = 'JD Sports\\item_type_group.json'
         
         # Check if the JSON file exists
         if not os.path.exists(json_path):
@@ -658,7 +658,7 @@ def get_apparel_group_performance_top_10_horizontal_stacked_bar_chart():
     try:
     
         # Define the JSON file path (use relative path)
-        json_path = 'Groupe Atlantic\item_attribute_performance.json'
+        json_path = 'JD Sports\\item_attribute_performance.json'
         
         # Check if the JSON file exists
         if not os.path.exists(json_path):
@@ -788,7 +788,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(mess
 def get_item_type_performance_top_10_stacked_horizontal_bar_chart():
     try:
         # Define the JSON file path (use relative path)
-        json_path = 'Groupe Atlantic\\item_types_performance.json'
+        json_path = 'JD Sports\\item_types_performance.json'
         
         # Check if the JSON file exists
         if not os.path.exists(json_path):
@@ -901,7 +901,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(mess
 def get_cumulative_performance_stacked_area_chart():
     try:
         # Define the JSON file path (use relative path)
-        json_path = 'Groupe Atlantic\\cumulative_performance_stacked_area_chart.json'
+        json_path = 'JD Sports\\cumulative_performance_stacked_area_chart.json'
         
         # Check if the JSON file exists
         if not os.path.exists(json_path):

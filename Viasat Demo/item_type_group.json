@@ -1,0 +1,37 @@
+{
+    "categories": [
+      "Safety & Security",
+      "Electronics",
+      "Terminal & Radios",
+      "Modems"
+    ],
+    "series": [
+      {
+        "color": "rgb(0,226,114)",
+        "data": [
+          13,
+          12,
+          9
+        ],
+        "name": "Approved and Classified"
+      },
+      {
+        "color": "red",
+        "data": [
+          14,
+          7,
+          12
+        ],
+        "name": "Revision Required"
+      },
+      {
+        "color": "rgb(44,175,254)",
+        "data": [
+          21,
+          20,
+          11
+        ],
+        "name": "Under Customs Review"
+      }
+    ]
+  }
