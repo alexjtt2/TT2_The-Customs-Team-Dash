@@ -1,0 +1,37 @@
+{
+  "categories": [
+    "Food & Drink",
+    "Household",
+    "Health & Beauty",
+    "Footwear"
+  ],
+  "series": [
+    {
+      "name": "Approved and Classified",
+      "data": [
+        11,
+        31,
+        23,
+        54
+      ]
+    },
+    {
+      "name": "Revision Required",
+      "data": [
+        32,
+        12,
+        34,
+        12
+      ]
+    },
+    {
+      "name": "Under Customs Review",
+      "data": [
+        13,
+        21,
+        42,
+        29
+      ]
+    }
+  ]
+}

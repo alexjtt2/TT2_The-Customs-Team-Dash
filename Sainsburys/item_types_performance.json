@@ -1,0 +1,53 @@
+{
+  "categories": [
+    "Prosecco 14% ABV",
+    "Sweetened Oat Drink",
+    "Sausage and Mash Ready Meal",
+    "Box of Assorted Chocolates (Milk, White and Dark)",
+    "Easter Egg",
+    "Yogurt with Cereal Pieces",
+    "Yogurt with Fruit Pieces",
+    "Frozen Cod in Mornay Sauce"
+  ],
+  "series": [
+    {
+      "name": "Approved and Classified",
+      "data": [
+        11,
+        21,
+        13,
+        24,
+        12,
+        14,
+        12,
+        19
+      ]
+    },
+    {
+      "name": "Revision Required",
+      "data": [
+        12,
+        9,
+        14,
+        12,
+        11,
+        22,
+        19,
+        9
+      ]
+    },
+    {
+      "name": "Under Customs Review",
+      "data": [
+        7,
+        11,
+        22,
+        19,
+        9,
+        11,
+        13,
+        24
+      ]
+    }
+  ]
+}

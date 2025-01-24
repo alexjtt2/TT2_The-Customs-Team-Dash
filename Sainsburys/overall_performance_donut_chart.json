@@ -1,0 +1,30 @@
+{
+  "data": [
+    {
+      "name": "Pending Information",
+      "percentage":10,
+      "y": 11
+    },
+    {
+      "name": "Approved and Classified",
+      "percentage": 40,
+      "y": 7
+    },
+    {
+      "name": "Revision Required",
+      "percentage": 10,
+      "y": 1
+    },
+    {
+      "name": "Under Customs Review",
+      "percentage":20,
+      "y": 6
+    },
+    {
+      "name": "Under Vendor Review",
+      "percentage": 20,
+      "y": 1
+    }
+  ],
+  "total": 3
+}
