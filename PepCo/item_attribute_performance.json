@@ -1,0 +1,36 @@
+{
+  "categories": [
+    "Cosmetic Application Sponge",
+    "Rose Quartz Face Stone",
+    "Nail/Foot File"
+  ],
+  "series": [
+    {
+      "name": "Approved and Classified",
+      "color": "rgb(0,226,114)",
+      "data": [
+        4,
+        null,
+        14
+      ]
+    },
+    {
+      "name": "Revision Required",
+      "color": "red",
+      "data": [
+        12,
+        3,
+        11
+      ]
+    },
+    {
+      "name": "Under Customs Review",
+      "color": "rgb(44,175,254)",
+      "data": [
+        null,
+        7,
+        5
+      ]
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "categories": [
+    "1-PACK 15 pcs Cosmetic sponges SPA",
+    "Facial roller SPA",
+    "2-PACK Nail file SPA"
+  ],
+  "series": [
+    {
+      "name": "Approved and Classified",
+      "color": "rgb(0,226,114)",
+      "data": [
+        13,
+        20,
+        10
+      ]
+    },
+    {
+      "name": "Revision Required",
+      "color": "red",
+      "data": [
+        9,
+        4,
+        null
+      ]
+    },
+    {
+      "name": "Under Customs Review",
+      "color": "rgb(44,175,254)",
+      "data": [
+        4,
+        4,
+        8
+      ]
+    }
+  ]
+}
