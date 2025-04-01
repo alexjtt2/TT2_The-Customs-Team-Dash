@@ -1,0 +1,36 @@
+{
+  "categories": [
+    "Footwear",
+    "Bags & Accessories",
+    "Garment"
+  ],
+  "series": [
+    {
+      "name": "Approved and Classified",
+      "color": "rgb(0,226,114)",
+      "data": [
+        10,
+        24,
+        6
+      ]
+    },
+    {
+      "name": "Revision Required",
+      "color": "red",
+      "data": [
+        21,
+        3,
+        12
+      ]
+    },
+    {
+      "name": "Under Customs Review",
+      "color": "rgb(44,175,254)",
+      "data": [
+        16,
+        9,
+        4
+      ]
+    }
+  ]
+}

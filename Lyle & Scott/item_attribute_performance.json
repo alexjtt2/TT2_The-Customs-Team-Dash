@@ -1,0 +1,48 @@
+{
+  "categories": [
+    "Sport Shoes",
+    "Handbags",
+    "Belt",
+    "Jumper",
+    "Hat",
+    "T-Shirts"
+  ],
+  "series": [
+    {
+      "name": "Approved and Classified",
+      "color": "rgb(0,226,114)",
+      "data": [
+        3,
+        9,
+        19,
+        15,
+        13,
+        8
+      ]
+    },
+    {
+      "name": "Revision Required",
+      "color": "red",
+      "data": [
+        3,
+        11,
+        13,
+        15,
+        6,
+        14
+      ]
+    },
+    {
+      "name": "Under Customs Review",
+      "color": "rgb(44,175,254)",
+      "data": [
+        6,
+        2,
+        9,
+        9,
+        3,
+        2
+      ]
+    }
+  ]
+}

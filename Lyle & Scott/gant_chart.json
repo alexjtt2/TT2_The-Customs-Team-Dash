@@ -1,0 +1,71 @@
+{
+  "data": [
+    {
+      "id": "ABC_1234",
+      "vendor": "Lyle_&_Scott_SUPP_123",
+      "start": "2025-03-02",
+      "end": "2025-07-30",
+      "classification_rate": 50,
+      "total_children": 8,
+      "approved_children": 1,
+      "children": [
+        {
+          "id": "#1 / UPC: A123 / Footwear / Sport Shoes / Casual Trainer / Qty: 100",
+          "parent": "ABC_1234",
+          "start": "2025-01-02",
+          "end": "2025-06-30",
+          "product_status": "Approved and Classified"
+        },
+        {
+          "id": "#2 / UPC: A124 / Bags & Accessories / Handbags / Shoulder Bag / Qty: 200",
+          "parent": "ABC_1234",
+          "start": "2025-02-16",
+          "end": "2025-07-30",
+          "product_status": "Approved and Classified"
+        },
+        {
+          "id": "#3 / UPC: A125 / Garment / Belt / Trouser Belt / Qty: 300",
+          "parent": "ABC_1234",
+          "start": "2025-03-12",
+          "end": "2025-07-01",
+          "product_status": "Under Customs Review"
+        },
+        {
+          "id": "#4 / UPC: A126 / Garment / Jumper / Casual Jumper / Qty: 400",
+          "parent": "ABC_1234",
+          "start": "2025-01-22",
+          "end": "2025-05-31",
+          "product_status": "Approved and Classified"
+        },
+        {
+          "id": "#5 / UPC: A127 / Garment / Hat / Straw Hat / Qty: 500",
+          "parent": "ABC_1234",
+          "start": "2025-04-02",
+          "end": "2025-09-01",
+          "product_status": "Under Customs Review"
+        },
+        {
+          "id": "#6 / UPC: A128 / Garment / T-Shirts / Polo Shirt / Qty: 600",
+          "parent": "ABC_1234",
+          "start": "2025-01-01",
+          "end": "2025-05-11",
+          "product_status": "Revision Required"
+        },
+        {
+          "id": "#7 / UPC: A129 / Footwear / Sport Shoes / Trainer / Qty: 700",
+          "parent": "ABC_1234",
+          "start": "2025-03-02",
+          "end": "2025-07-30",
+          "product_status": "Under Customs Review"
+        },
+        {
+          "id": "#8 / UPC: A130 / Footwear / Sport Shoes / C Trainer / Qty: 800",
+          "parent": "ABC_1234",
+          "start": "2025-02-22",
+          "end": "2025-06-11",
+          "product_status": "Revision Required"
+        }
+      ]
+    }
+  ]
+}

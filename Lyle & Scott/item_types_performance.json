@@ -1,0 +1,56 @@
+{
+  "categories": [
+    "Casual Trainer",
+    "Shoulder Bag",
+    "Trouser Belt",
+    "Casual Jumper",
+    "Straw Hat",
+    "Polo Shirt",
+    "Trainer",
+    "C Trainer"
+  ],
+  "series": [
+    {
+      "name": "Approved and Classified",
+      "color": "rgb(0,226,114)",
+      "data": [
+        17,
+        12,
+        5,
+        15,
+        6,
+        9,
+        14,
+        3
+      ]
+    },
+    {
+      "name": "Revision Required",
+      "color": "red",
+      "data": [
+        5,
+        15,
+        7,
+        1,
+        15,
+        0,
+        0,
+        15
+      ]
+    },
+    {
+      "name": "Under Customs Review",
+      "color": "rgb(44,175,254)",
+      "data": [
+        10,
+        8,
+        9,
+        2,
+        5,
+        3,
+        1,
+        10
+      ]
+    }
+  ]
+}
