@@ -1,12 +1,12 @@
 {
   "categories": [
-    "Not Slippers, for Sports or Protection (Workwear)",
-    "Shoulder Bag",
-    "Crossbody Camera Bag",
-    "Straw hat",
-    "Bucket Hat",
-    "Strawberry earrings",
-    "Eagle hoops"
+    "2025-03-27",
+    "2025-03-28",
+    "2025-03-29",
+    "2025-03-30",
+    "2025-03-31",
+    "2025-04-01",
+    "2025-04-02"
   ],
   "series": [
     {
@@ -14,38 +14,38 @@
       "color": "rgb(0,226,114)",
       "data": [
         18,
-        1,
-        13,
         19,
-        0,
-        5,
-        11
+        64,
+        86,
+        53,
+        14,
+        124
       ]
     },
     {
       "name": "Revision Required",
       "color": "red",
       "data": [
-        15,
-        11,
-        5,
+        2,
+        44,
+        25,
+        42,
+        45,
         8,
-        9,
-        3,
-        1
+        40
       ]
     },
     {
       "name": "Under Customs Review",
       "color": "rgb(44,175,254)",
       "data": [
-        null,
-        3,
-        8,
-        9,
-        1,
-        3,
-        3
+        44,
+        31,
+        6,
+        55,
+        13,
+        10,
+        61
       ]
     }
   ]

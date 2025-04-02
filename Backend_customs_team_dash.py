@@ -280,7 +280,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(mess
 def get_kpi_cards():
     try:
         # Define the JSON file path (use relative path)
-        json_path = 'Kurt_Geiger\\kpi_cards.json'
+        json_path = 'Dyson\\kpi_cards.json'
         
         # Check if the JSON file exists
         if not os.path.exists(json_path):
@@ -418,7 +418,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(mess
 def get_overall_performance_donut_chart():
     try:
         # Define the JSON file path (use relative path)
-        json_path = 'Kurt_Geiger\\overall_performance_donut_chart.json'
+        json_path = 'Dyson\\overall_performance_donut_chart.json'
         
         # Check if the JSON file exists
         if not os.path.exists(json_path):
@@ -528,7 +528,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(mess
 def get_apparel_performance_top_10_stacked_column__chart():
     try:
         # Define the JSON file path (use relative path)
-        json_path = 'Kurt_Geiger\\item_type_group.json'
+        json_path = 'Dyson\\item_type_group.json'
         
         # Check if the JSON file exists
         if not os.path.exists(json_path):
@@ -656,9 +656,8 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(mess
 @app.route('/api/apparel_group_performance_top_10_horizontal_stacked_bar_chart', methods=['GET'])
 def get_apparel_group_performance_top_10_horizontal_stacked_bar_chart():
     try:
-    
         # Define the JSON file path (use relative path)
-        json_path = 'Kurt_Geiger\\item_attribute_performance.json'
+        json_path = 'Dyson\\item_attribute_performance.json'
         
         # Check if the JSON file exists
         if not os.path.exists(json_path):
@@ -678,36 +677,36 @@ def get_apparel_group_performance_top_10_horizontal_stacked_bar_chart():
             logging.error(f"'series' key missing or not a list in JSON file: {json_path}")
             return jsonify({'error': 'Invalid data format: missing or incorrect "series".'}), 500
         
-        # Further validate each series entry
+        # Calculate total counts for each category
+        total_counts = {category: 0 for category in data['categories']}
         for series_entry in data['series']:
-            if 'name' not in series_entry or 'data' not in series_entry:
-                logging.error(f"Invalid series entry format in JSON file: {series_entry}")
-                return jsonify({'error': 'Invalid data format: series entries must contain "name" and "data".'}), 500
-            if not isinstance(series_entry['data'], list):
-                logging.error(f"'data' field in series entry is not a list: {series_entry}")
-                return jsonify({'error': 'Invalid data format: "data" field in series must be a list.'}), 500
+            for idx, value in enumerate(series_entry['data']):
+                if value is not None:
+                    total_counts[data['categories'][idx]] += value
         
-        # Ensure that each series' data length matches the number of categories
-        num_categories = len(data['categories'])
+        # Sort categories by total count in descending order
+        sorted_categories = sorted(total_counts.keys(), key=lambda x: total_counts[x], reverse=True)
+        
+        # Reorder the series data to match the sorted categories
+        sorted_series = []
         for series_entry in data['series']:
-            if len(series_entry['data']) != num_categories:
-                logging.error(f"Data length mismatch in series '{series_entry['name']}': expected {num_categories}, got {len(series_entry['data'])}")
-                return jsonify({'error': f'Data length mismatch in series "{series_entry["name"]}".'}), 500
+            sorted_data = [series_entry['data'][data['categories'].index(category)] for category in sorted_categories]
+            sorted_series.append({'name': series_entry['name'], 'data': sorted_data})
+        
+        # Update the response data
+        response = {
+            'categories': sorted_categories,
+            'series': sorted_series
+        }
+        
+        return jsonify(response), 200
 
-        # Optional Backend Preprocessing: Replace zeros with null to hide them in Highcharts
-        # Uncomment the following lines if you prefer to handle zeros by setting them to null
-        # for series_entry in data['series']:
-        #     series_entry['data'] = [value if value != 0 else None for value in series_entry['data']]
-        
-        # Alternatively, remove series with all zero values
-        # filtered_series = []
-        # for series_entry in data['series']:
-        #     if any(value != 0 for value in series_entry['data']):
-        #         filtered_series.append(series_entry)
-        # data['series'] = filtered_series
-        
-        # Return the JSON data directly
-        return jsonify(data), 200
+    except json.JSONDecodeError as e:
+        logging.error(f"JSON decode error in apparel group performance top 10 horizontal stacked bar chart endpoint: {e}")
+        return jsonify({'error': 'Invalid JSON format.'}), 500
+    except Exception as e:
+        logging.error(f"Error in apparel group performance top 10 horizontal stacked bar chart endpoint: {e}")
+        return jsonify({'error': 'An unexpected error occurred.'}), 500
 
     except json.JSONDecodeError as e:
         logging.error(f"JSON decode error in apparel group performance top 10 horizontal stacked bar chart endpoint: {e}")
@@ -788,7 +787,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(mess
 def get_item_type_performance_top_10_stacked_horizontal_bar_chart():
     try:
         # Define the JSON file path (use relative path)
-        json_path = 'Kurt_Geiger\\item_types_performance.json'
+        json_path = 'Dyson\\item_types_performance.json'
         
         # Check if the JSON file exists
         if not os.path.exists(json_path):
@@ -808,36 +807,32 @@ def get_item_type_performance_top_10_stacked_horizontal_bar_chart():
             logging.error(f"'series' key missing or not a list in JSON file: {json_path}")
             return jsonify({'error': 'Invalid data format: missing or incorrect "series".'}), 500
         
-        # Further validate each series entry
+        # Calculate total counts for each category
+        total_counts = {category: 0 for category in data['categories']}
         for series_entry in data['series']:
-            if 'name' not in series_entry or 'data' not in series_entry:
-                logging.error(f"Invalid series entry format in JSON file: {series_entry}")
-                return jsonify({'error': 'Invalid data format: series entries must contain "name" and "data".'}), 500
-            if not isinstance(series_entry['data'], list):
-                logging.error(f"'data' field in series entry is not a list: {series_entry}")
-                return jsonify({'error': 'Invalid data format: "data" field in series must be a list.'}), 500
+            for idx, value in enumerate(series_entry['data']):
+                if value is not None:
+                    total_counts[data['categories'][idx]] += value
         
-        # Ensure that each series' data length matches the number of categories
-        num_categories = len(data['categories'])
+        # Sort categories by total count in descending order
+        sorted_categories = sorted(total_counts.keys(), key=lambda x: total_counts[x], reverse=True)
+        
+        # Reorder the series data to match the sorted categories
+        sorted_series = []
         for series_entry in data['series']:
-            if len(series_entry['data']) != num_categories:
-                logging.error(f"Data length mismatch in series '{series_entry['name']}': expected {num_categories}, got {len(series_entry['data'])}")
-                return jsonify({'error': f'Data length mismatch in series "{series_entry["name"]}".'}), 500
-
-        # Optional Backend Preprocessing: Replace zeros with null to hide them in Highcharts
-        # Uncomment the following lines if you prefer to handle zeros by setting them to null
-        # for series_entry in data['series']:
-        #     series_entry['data'] = [value if value != 0 else None for value in series_entry['data']]
+            sorted_data = [
+                series_entry['data'][data['categories'].index(category)] if series_entry['data'][data['categories'].index(category)] != 0 else None
+                for category in sorted_categories
+            ]
+            sorted_series.append({'name': series_entry['name'], 'data': sorted_data})
         
-        # Alternatively, remove series with all zero values
-        # filtered_series = []
-        # for series_entry in data['series']:
-        #     if any(value != 0 for value in series_entry['data']):
-        #         filtered_series.append(series_entry)
-        # data['series'] = filtered_series
-
-        # Return the JSON data directly
-        return jsonify(data), 200
+        # Update the response data
+        response = {
+            'categories': sorted_categories,
+            'series': sorted_series
+        }
+        
+        return jsonify(response), 200
 
     except json.JSONDecodeError as e:
         logging.error(f"JSON decode error in item type performance endpoint: {e}")
@@ -901,7 +896,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(mess
 def get_cumulative_performance_stacked_area_chart():
     try:
         # Define the JSON file path (use relative path)
-        json_path = 'Kurt_Geiger\\cumulative_performance_stacked_area_chart.json'
+        json_path = 'Dyson\\cumulative_performance_stacked_area_chart.json'
         
         # Check if the JSON file exists
         if not os.path.exists(json_path):

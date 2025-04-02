@@ -1,0 +1,92 @@
+{
+  "categories": [
+    "Vacuum Cleaner",
+    "Pressure Washer",
+    "Steam Mop",
+    "Carpet Cleaner",
+    "Floor Polisher",
+    "Hair Dryer",
+    "Hair Clipper",
+    "Hair Crimper",
+    "Hair Curling Tongs",
+    "Hair Straighteners",
+    "Hair Wand",
+    "Heated Rollers",
+    "Coach Screws",
+    "Other Nuts",
+    "Self-Locking Nuts (Hi-Lok)",
+    "Lock or Spring Washers",
+    "Other Washers"
+  ],
+  "series": [
+    {
+      "name": "Approved and Classified",
+      "color": "rgb(0,226,114)",
+      "data": [
+        0,
+        2,
+        4,
+        8,
+        19,
+        20,
+        15,
+        9,
+        0,
+        18,
+        11,
+        7,
+        16,
+        3,
+        9,
+        15,
+        5
+      ]
+    },
+    {
+      "name": "Revision Required",
+      "color": "red",
+      "data": [
+        15,
+        6,
+        11,
+        14,
+        5,
+        4,
+        5,
+        7,
+        7,
+        13,
+        8,
+        1,
+        5,
+        10,
+        1,
+        9,
+        6
+      ]
+    },
+    {
+      "name": "Under Customs Review",
+      "color": "rgb(44,175,254)",
+      "data": [
+        3,
+        5,
+        10,
+        6,
+        0,
+        0,
+        3,
+        10,
+        2,
+        2,
+        10,
+        3,
+        10,
+        6,
+        0,
+        9,
+        3
+      ]
+    }
+  ]
+}
