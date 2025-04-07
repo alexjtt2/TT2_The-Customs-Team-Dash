@@ -1,0 +1,44 @@
+{
+  "categories": [
+    "Not Slippers, for Sports or Protection (Workwear)",
+    "Shoulder Bag",
+    "Food & Drink - Confectionery (Sweets)",
+    "Bucket Hat",
+    "Derby County Crest Round Stud Earrings"
+  ],
+  "series": [
+    {
+      "name": "Approved and Classified",
+      "color": "rgb(0,226,114)",
+      "data": [
+        18,
+        1,
+        13,
+        19,
+        5
+      ]
+    },
+    {
+      "name": "Revision Required",
+      "color": "red",
+      "data": [
+        15,
+        11,
+        5,
+        8,
+        9
+      ]
+    },
+    {
+      "name": "Under Customs Review",
+      "color": "rgb(44,175,254)",
+      "data": [
+        10,
+        3,
+        8,
+        9,
+        1
+      ]
+    }
+  ]
+}

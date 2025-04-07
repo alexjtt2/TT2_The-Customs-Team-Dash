@@ -1,0 +1,44 @@
+{
+  "categories": [
+    "Jellies",
+    "Closed toe",
+    "Handbags",
+    "Hats and other headgear",
+    "Earrings"
+  ],
+  "series": [
+    {
+      "name": "Approved and Classified",
+      "color": "rgb(0,226,114)",
+      "data": [
+        8,
+        13,
+        9,
+        13,
+        18
+      ]
+    },
+    {
+      "name": "Revision Required",
+      "color": "red",
+      "data": [
+        4,
+        14,
+        2,
+        6,
+        14
+      ]
+    },
+    {
+      "name": "Under Customs Review",
+      "color": "rgb(44,175,254)",
+      "data": [
+        10,
+        7,
+        1,
+        6,
+        10
+      ]
+    }
+  ]
+}

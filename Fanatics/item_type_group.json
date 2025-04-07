@@ -1,0 +1,44 @@
+{
+  "categories": [
+    "Footwear",
+    "Bags & Accessories",
+    "Garments",
+    "Jewellery",
+    "Food & Drink - Confectionery (Sweets)"
+  ],
+  "series": [
+    {
+      "name": "Approved and Classified",
+      "color": "rgb(0,226,114)",
+      "data": [
+        6,
+        18,
+        18,
+        10,
+        26
+      ]
+    },
+    {
+      "name": "Revision Required",
+      "color": "red",
+      "data": [
+        8,
+        11,
+        8,
+        15,
+        34
+      ]
+    },
+    {
+      "name": "Under Customs Review",
+      "color": "rgb(44,175,254)",
+      "data": [
+        6,
+        8,
+        8,
+        7,
+        10
+      ]
+    }
+  ]
+}
