@@ -1,0 +1,52 @@
+{
+  "categories": [
+      "WASHERS - FLAT WASHERS",
+      "WASHERS - LOCK WASHERS",
+      "WASHERS - NON FLAT, LOCK, PENNY OR SPRING WASHERS",
+      "WASHERS - PENNY WASHERS",
+      "WASHERS - SPRING WASHERS",
+      "WASHERS - WASHER COVER",
+      "SCREWS - COACH SCREWS"
+  ],
+  "series": [
+    {
+      "name": "Approved and Classified",
+      "color": "rgb(0,226,114)",
+      "data": [
+        17,
+        12,
+        5,
+        15,
+        6,
+        9,
+        14
+      ]
+    },
+    {
+      "name": "Revision Required",
+      "color": "red",
+      "data": [
+        5,
+        15,
+        7,
+        1,
+        15,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Under Customs Review",
+      "color": "rgb(44,175,254)",
+      "data": [
+        10,
+        8,
+        9,
+        2,
+        5,
+        3,
+        1
+      ]
+    }
+  ]
+}

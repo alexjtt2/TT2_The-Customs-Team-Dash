@@ -1,0 +1,32 @@
+{
+  "categories": [
+      "WASHERS",
+      "SCREWS"
+  ],
+  "series": [
+    {
+      "name": "Approved and Classified",
+      "color": "rgb(0,226,114)",
+      "data": [
+        45,
+        23
+      ]
+    },
+    {
+      "name": "Revision Required",
+      "color": "red",
+      "data": [
+        35,
+        16
+      ]
+    },
+    {
+      "name": "Under Customs Review",
+      "color": "rgb(44,175,254)",
+      "data": [
+        39,
+        29
+      ]
+    }
+  ]
+}
