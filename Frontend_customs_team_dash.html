@@ -381,6 +381,20 @@
         };
 
         function openTab(evt, tabName) {
+            /**
+            Opens the specified tab and redraws charts if needed.
+
+            Parameters
+            ----------
+            evt : Event
+                The event object from the tab click.
+            tabName : str
+                The name (ID) of the tab to open.
+
+            Returns
+            -------
+            None
+            */
             var i, tabcontent, tablinks;
             // Hide all tabcontent
             tabcontent = document.getElementsByClassName("tabcontent");
@@ -411,6 +425,13 @@
 
         // Function to draw all charts in Tab 1
         function drawCharts() {
+            /**
+            Draws all charts in Tab 1 by calling their respective functions.
+
+            Returns
+            -------
+            None
+            */
             drawDonutChart();
             drawApparelTypeStackedColumnChart('container1-chart');
             drawApparelGroupStackedBarChart();
@@ -420,6 +441,19 @@
 
         // Function to apply status colors to series
         function applyStatusColorsToSeries(series) {
+            /**
+            Applies status colors to a Highcharts series array.
+
+            Parameters
+            ----------
+            series : Array
+                Array of Highcharts series objects.
+
+            Returns
+            -------
+            Array
+                Series array with color properties applied.
+            */
             return series.map(seriesItem => {
                 const color = statusColors[seriesItem.name] || seriesItem.color;
                 return { ...seriesItem, color };
@@ -428,6 +462,19 @@
 
         // Function to apply status colors to data
         function applyStatusColorsToData(data) {
+            /**
+            Applies status colors to a Highcharts data array.
+
+            Parameters
+            ----------
+            data : Array
+                Array of Highcharts data point objects.
+
+            Returns
+            -------
+            Array
+                Data array with color properties applied.
+            */
             return data.map(dataItem => {
                 const color = statusColors[dataItem.name] || dataItem.color;
                 return { ...dataItem, color };
@@ -436,6 +483,13 @@
 
         // Function to update KPI cards
         function updateKpiCards() {
+            /**
+            Fetches KPI card data from the backend and updates the KPI cards in the dashboard.
+
+            Returns
+            -------
+            None
+            */
             fetch('http://localhost:5000/api/kpi_cards')
                 .then(response => response.json())
                 .then(data => {
@@ -491,6 +545,13 @@
 
         // Function to draw the Highcharts Donut Chart with backend data
         function drawDonutChart() {
+            /**
+            Draws the Highcharts Donut Chart using data fetched from the backend API.
+
+            Returns
+            -------
+            None
+            */
             fetch('http://localhost:5000/api/overall_performance_donut_chart')
                 .then(response => response.json())
                 .then(data => {
@@ -537,6 +598,18 @@
 
         // Function to draw the Highcharts Stacked Column Chart with backend data
         function drawApparelTypeStackedColumnChart(containerId) {
+            /**
+            Draws a Highcharts stacked column chart for apparel type performance.
+
+            Parameters
+            ----------
+            containerId : str
+                The DOM element ID where the chart will be rendered.
+
+            Returns
+            -------
+            None
+            */
             fetch('http://localhost:5000/api/apparel_performance_top_10_stacked_column__chart')
                 .then(response => response.json())
                 .then(data => {
@@ -628,6 +701,13 @@
         // Function to draw the Highcharts Stacked Horizontal Bar Chart with backend data
         // 'Apparel Group' has been renamed to 'Item Attribute' for consistency with the rest of the app
         function drawApparelGroupStackedBarChart() {
+            /**
+            Draws a Highcharts stacked horizontal bar chart for item attribute performance.
+
+            Returns
+            -------
+            None
+            */
             fetch('http://localhost:5000/api/apparel_group_performance_top_10_horizontal_stacked_bar_chart')
                 .then(response => response.json())
                 .then(data => {
@@ -717,6 +797,13 @@
 
         // Function to draw the Highcharts Stacked Bar Chart for Item Type
         function drawItemTypeStackedBarChart() {
+            /**
+            Draws a Highcharts stacked bar chart for item type performance.
+
+            Returns
+            -------
+            None
+            */
             fetch('http://localhost:5000/api/item_type_performance_top_10_horizontal_stacked_bar_chart')
                 .then(response => response.json())
                 .then(data => {
@@ -806,6 +893,13 @@
 
         // Function to draw the Highcharts Stacked Area Chart with backend data
         function drawCumulativePerformanceAreaChart() {
+            /**
+            Draws a Highcharts stacked area chart for cumulative performance over the last 7 days.
+
+            Returns
+            -------
+            None
+            */
             fetch('http://localhost:5000/api/cumulative_performance_stacked_area_chart')
                 .then(response => response.json())
                 .then(data => {

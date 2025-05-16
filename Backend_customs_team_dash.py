@@ -4,6 +4,7 @@ import pyodbc
 import logging
 import os
 import json
+from Backend_JSON import json_api
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
@@ -235,6 +236,9 @@ ORDER BY
     agc.ItemType_Name, 
     agc.Status_Name;
 """
+
+# Register Blueprint for JSON endpoints
+app.register_blueprint(json_api)
 
 # @app.route('/api/kpi_cards', methods=['GET'])
 # def get_kpi_cards():
