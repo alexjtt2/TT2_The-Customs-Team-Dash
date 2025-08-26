@@ -20,7 +20,7 @@ def get_kpi_cards():
         JSON response containing KPI cards data or error message.
     """
     try:
-        json_path = 'Dyson\\kpi_cards.json'
+        json_path = 'Brainstorm_dataset\\kpi_cards.json'
         if not os.path.exists(json_path):
             logging.error(f"JSON file not found at path: {json_path}")
             return jsonify({'error': 'Data file not found.'}), 500
@@ -73,7 +73,7 @@ def get_overall_performance_donut_chart():
         JSON response containing donut chart data or error message.
     """
     try:
-        json_path = 'Dyson\\overall_performance_donut_chart.json'
+        json_path = 'Brainstorm_dataset\\overall_performance_donut_chart.json'
         if not os.path.exists(json_path):
             logging.error(f"JSON file not found at path: {json_path}")
             return jsonify({'error': 'Data file not found.'}), 500
@@ -113,7 +113,7 @@ def get_apparel_performance_top_10_stacked_column__chart():
         JSON response containing stacked column chart data or error message.
     """
     try:
-        json_path = 'Dyson\\item_type_group.json'
+        json_path = 'Brainstorm_dataset\\item_type_group.json'
         if not os.path.exists(json_path):
             logging.error(f"JSON file not found at path: {json_path}")
             return jsonify({'error': 'Data file not found.'}), 500
@@ -157,7 +157,7 @@ def get_apparel_group_performance_top_10_horizontal_stacked_bar_chart():
         JSON response containing horizontal stacked bar chart data or error message.
     """
     try:
-        json_path = 'Dyson\\item_attribute_performance.json'
+        json_path = 'Brainstorm_dataset\\item_attribute_performance.json'
         if not os.path.exists(json_path):
             logging.error(f"JSON file not found at path: {json_path}")
             return jsonify({'error': 'Data file not found.'}), 500
@@ -204,7 +204,7 @@ def get_item_type_performance_top_10_stacked_horizontal_bar_chart():
         JSON response containing item type stacked bar chart data or error message.
     """
     try:
-        json_path = 'Dyson\\item_types_performance.json'
+        json_path = 'Brainstorm_dataset\\item_types_performance.json'
         if not os.path.exists(json_path):
             logging.error(f"JSON file not found at path: {json_path}")
             return jsonify({'error': 'Data file not found.'}), 500
@@ -253,7 +253,7 @@ def get_cumulative_performance_stacked_area_chart():
         JSON response containing stacked area chart data or error message.
     """
     try:
-        json_path = 'Dyson\\cumulative_performance_stacked_area_chart.json'
+        json_path = 'Brainstorm_dataset\\cumulative_performance_stacked_area_chart.json'
         if not os.path.exists(json_path):
             logging.error(f"JSON file not found at path: {json_path}")
             return jsonify({'error': 'Data file not found.'}), 500

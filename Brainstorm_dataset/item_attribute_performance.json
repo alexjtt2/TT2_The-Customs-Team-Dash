@@ -1,0 +1,44 @@
+{
+  "categories": [
+    "Cleaning",
+    "Personal Grooming",
+    "Screws",
+    "Nuts",
+    "Washers"
+  ],
+  "series": [
+    {
+      "name": "Approved and Classified",
+      "color": "rgb(0,226,114)",
+      "data": [
+        4,
+        13,
+        14,
+        14,
+        20
+      ]
+    },
+    {
+      "name": "Revision Required",
+      "color": "red",
+      "data": [
+        10,
+        10,
+        3,
+        4,
+        1
+      ]
+    },
+    {
+      "name": "Under Customs Review",
+      "color": "rgb(44,175,254)",
+      "data": [
+        5,
+        5,
+        1,
+        1,
+        7
+      ]
+    }
+  ]
+}
