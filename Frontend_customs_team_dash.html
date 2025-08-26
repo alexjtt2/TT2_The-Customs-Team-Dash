@@ -121,7 +121,7 @@
         /* Rows and Containers */
         .row {
             display: flex;
-            flex: 1;
+            flex: 1 1 0;
             gap: 10px;
             min-height: 0;
         }
@@ -129,7 +129,7 @@
             background-color: #fff;
             border-radius: 10px;
             box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.2);
-            flex: 1;
+            flex: 1 1 0;
             display: flex;
             flex-direction: column;
             overflow: hidden;
@@ -359,12 +359,7 @@
                 <div id="container2-chart" class="chart-container"></div>
             </div>
         </div>
-        <div class="row">
-            <!-- Bottom row with the stacked area chart -->
-            <div class="container full">
-                <div id="container4-chart" class="chart-container"></div>
-            </div>
-        </div>
+    <!-- Removed bottom row with the stacked area chart -->
     </div>
     <!-- Tab 4 Content -->
     <div id="tab4" class="tabcontent">
@@ -436,7 +431,7 @@
             drawApparelTypeStackedColumnChart('container1-chart');
             drawApparelGroupStackedBarChart();
             drawItemTypeStackedBarChart();
-            drawCumulativePerformanceAreaChart();
+            // drawCumulativePerformanceAreaChart();
         }
 
         // Function to apply status colors to series
