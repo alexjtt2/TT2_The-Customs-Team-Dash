@@ -298,7 +298,7 @@
                         <div class="kpi-card">
                             <div class="kpi-border"></div>
                             <div class="kpi-content">
-                                <p class="kpi-title">Pending Information</p>
+                                <p class="kpi-title">Pending</p>
                                 <h1 class="kpi-value">0</h1>
                                 <div class="kpi-change">
                                     <span class="change-percentage" style="color: grey;">N/A</span>
@@ -309,7 +309,7 @@
                         <div class="kpi-card">
                             <div class="kpi-border"></div>
                             <div class="kpi-content">
-                                <p class="kpi-title">Under Vendor Review</p>
+                                <p class="kpi-title">In Progress</p>
                                 <h1 class="kpi-value">0</h1>
                                 <div class="kpi-change">
                                     <span class="change-percentage" style="color: grey;">N/A</span>
@@ -320,7 +320,7 @@
                         <div class="kpi-card">
                             <div class="kpi-border"></div>
                             <div class="kpi-content">
-                                <p class="kpi-title">Under Customs Review</p>
+                                <p class="kpi-title">Under Review</p>
                                 <h1 class="kpi-value">0</h1>
                                 <div class="kpi-change">
                                     <span class="change-percentage" style="color: grey;">N/A</span>
@@ -331,7 +331,7 @@
                         <div class="kpi-card">
                             <div class="kpi-border"></div>
                             <div class="kpi-content">
-                                <p class="kpi-title">Revision Required</p>
+                                <p class="kpi-title">Rejected</p>
                                 <h1 class="kpi-value">0</h1>
                                 <div class="kpi-change">
                                     <span class="change-percentage" style="color: grey;">N/A</span>
@@ -373,11 +373,11 @@
     <script>
         // Status Colors Mapping
         const statusColors = {
-            'Pending Information': 'rgb(211,211,211)',
-            'Under Vendor Review': 'rgb(44,175,254)',
-            'Under Customs Review': 'orange',
-            'Approved and Classified': 'rgb(0,226,114)',
-            'Revision Required': 'red'
+            'Pending': 'rgb(211,211,211)',
+            'In Progress': 'rgb(44,175,254)',
+            'Under Review': 'orange',
+            'Approved': 'rgb(0,226,114)',
+            'Rejected': 'red'
         };
 
         function openTab(evt, tabName) {

@@ -35,7 +35,7 @@ WITH StatusCounts AS (
     LEFT JOIN
         [DemoTT2MandSMasterTest].[dbo].[ProductGroup] pg ON lit.ProductGroupId = pg.Id
     WHERE 
-        ps.Description IN ('Pending Information', 'Under Vendor Review', 'Revision Required', 'Under Customs Review')
+    ps.Description IN ('Pending', 'In Progress', 'Rejected', 'Under Review')
         AND (
             (CAST(p.DateSubmitted AS DATE) BETWEEN DATEADD(DAY, -7, '2024-09-05') AND '2024-09-05')
             OR 
@@ -103,7 +103,7 @@ LEFT JOIN
 LEFT JOIN
     [DemoTT2MandSMasterTest].[dbo].[ProductGroup] pg ON lit.ProductGroupId = pg.Id
 WHERE 
-    ps.Description IN ('Pending Information', 'Under Vendor Review', 'Revision Required', 'Under Customs Review')
+    ps.Description IN ('Pending', 'In Progress', 'Rejected', 'Under Review')
     AND COALESCE(CAST(p.DateSubmitted AS DATE), CAST(p.CreatedAt AS DATE)) = '2024-09-05'
 GROUP BY 
     ps.Description

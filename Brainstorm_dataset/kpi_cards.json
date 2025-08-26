@@ -4,27 +4,27 @@
       "earliest_count": 28,
       "latest_count": 56,
       "percentage_change": -100,
-      "status_name": "Pending Information"
+  "status_name": "Pending"
     },
     {
       "count_change":9,
       "earliest_count": 24,
       "latest_count": 33,
       "percentage_change": 37.50,
-      "status_name": "Revision Required"
+  "status_name": "Rejected"
     },
     {
       "count_change": 18,
       "earliest_count":34,
       "latest_count": 52,
       "percentage_change": 52.94,
-      "status_name": "Under Customs Review"
+  "status_name": "Under Review"
     },
     {
       "count_change": 10,
       "earliest_count": 21,
       "latest_count": 31,
       "percentage_change": 47.62,
-      "status_name": "Under Vendor Review"
+  "status_name": "In Progress"
     }
   ]

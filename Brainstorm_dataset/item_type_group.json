@@ -5,7 +5,7 @@
   ],
   "series": [
     {
-      "name": "Approved and Classified",
+  "name": "Approved",
       "color": "rgb(0,226,114)",
       "data": [
         2,
@@ -13,7 +13,7 @@
       ]
     },
     {
-      "name": "Revision Required",
+  "name": "Rejected",
       "color": "red",
       "data": [
         14,
@@ -21,7 +21,7 @@
       ]
     },
     {
-      "name": "Under Customs Review",
+  "name": "Under Review",
       "color": "rgb(44,175,254)",
       "data": [
         7,
